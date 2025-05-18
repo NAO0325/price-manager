@@ -1,0 +1,32 @@
+server:
+  port: 9090
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  application:
+    name: price-manager-web-back
+  datasource:
+    url: jdbc:h2:~/pricedb;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+  h2:
+    console.enabled: true
+  jpa:
+    show-sql: false
+    open-in-view: false
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format-sql: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:init.sql
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG

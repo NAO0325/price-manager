@@ -1,0 +1,324 @@
+{
+	"info": {
+		"_postman_id": "e9025960-75d0-4d93-a08c-d173ff37444f",
+		"name": "Price",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42897970"
+	},
+	"item": [
+		{
+			"name": "localhost:9090/v1/price/findByBrandProductBetweenDate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains correct data\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(1);",
+							"    pm.expect(jsonData.brandId).to.eql(1);",
+							"    pm.expect(jsonData.price).to.eql(35.5);",
+							"    pm.expect(jsonData.startDate).to.eql(\"2020-06-14T00:00:00Z\");",
+							"    pm.expect(jsonData.endDate).to.eql(\"2020-12-31T23:59:59Z\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:9090/v1/price/findByBrandProductBetweenDate?dateQuery=2020-06-14T10:00:00Z&productId=35455&brandId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"v1",
+						"price",
+						"findByBrandProductBetweenDate"
+					],
+					"query": [
+						{
+							"key": "dateQuery",
+							"value": "2020-06-14T10:00:00Z"
+						},
+						{
+							"key": "productId",
+							"value": "35455"
+						},
+						{
+							"key": "brandId",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Caso Test 1"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9090/v1/price/findByBrandProductBetweenDate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains correct data\", function () {",
+							"    pm.expect(jsonData.id).to.eql(2);",
+							"    pm.expect(jsonData.brandId).to.eql(1);",
+							"    pm.expect(jsonData.price).to.eql(25.45);",
+							"    pm.expect(jsonData.startDate).to.eql(\"2020-06-14T15:00:00Z\");",
+							"    pm.expect(jsonData.endDate).to.eql(\"2020-06-14T18:30:00Z\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:9090/v1/price/findByBrandProductBetweenDate?dateQuery=2020-06-14T16:00:00Z&productId=35455&brandId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"v1",
+						"price",
+						"findByBrandProductBetweenDate"
+					],
+					"query": [
+						{
+							"key": "dateQuery",
+							"value": "2020-06-14T16:00:00Z"
+						},
+						{
+							"key": "productId",
+							"value": "35455"
+						},
+						{
+							"key": "brandId",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Caso Test 2"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9090/v1/price/findByBrandProductBetweenDate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response should be valid JSON\", function () {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Price and date information is correct\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.price).to.eql(35.5);",
+							"    pm.expect(jsonData.startDate).to.eql(\"2020-06-14T00:00:00Z\");",
+							"    pm.expect(jsonData.endDate).to.eql(\"2020-12-31T23:59:59Z\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:9090/v1/price/findByBrandProductBetweenDate?dateQuery=2020-06-14T21:00:00Z&productId=35455&brandId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"v1",
+						"price",
+						"findByBrandProductBetweenDate"
+					],
+					"query": [
+						{
+							"key": "dateQuery",
+							"value": "2020-06-14T21:00:00Z"
+						},
+						{
+							"key": "productId",
+							"value": "35455"
+						},
+						{
+							"key": "brandId",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Caso Test3"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9090/v1/price/findByBrandProductBetweenDate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains correct data\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(3);",
+							"    pm.expect(jsonData.brandId).to.eql(1);",
+							"    pm.expect(jsonData.price).to.eql(30.5);",
+							"    pm.expect(jsonData.startDate).to.eql(\"2020-06-15T00:00:00Z\");",
+							"    pm.expect(jsonData.endDate).to.eql(\"2020-06-15T11:00:00Z\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:9090/v1/price/findByBrandProductBetweenDate?dateQuery=2020-06-15T10:00:00Z&productId=35455&brandId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"v1",
+						"price",
+						"findByBrandProductBetweenDate"
+					],
+					"query": [
+						{
+							"key": "dateQuery",
+							"value": "2020-06-15T10:00:00Z"
+						},
+						{
+							"key": "productId",
+							"value": "35455"
+						},
+						{
+							"key": "brandId",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Caso Test4"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9090/v1/price/findByBrandProductBetweenDate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains correct data\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(4);",
+							"    pm.expect(jsonData.brandId).to.eql(1);",
+							"    pm.expect(jsonData.price).to.eql(38.95);",
+							"    pm.expect(jsonData.startDate).to.eql(\"2020-06-15T16:00:00Z\");",
+							"    pm.expect(jsonData.endDate).to.eql(\"2020-12-31T23:59:59Z\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:9090/v1/price/findByBrandProductBetweenDate?dateQuery=2020-06-16T21:00:00Z&productId=35455&brandId=1",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"v1",
+						"price",
+						"findByBrandProductBetweenDate"
+					],
+					"query": [
+						{
+							"key": "dateQuery",
+							"value": "2020-06-16T21:00:00Z"
+						},
+						{
+							"key": "productId",
+							"value": "35455"
+						},
+						{
+							"key": "brandId",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Caso Test5"
+			},
+			"response": []
+		}
+	]
+}

@@ -39,7 +39,7 @@ Para compilar y tener todos los recursos, ejecuta el siguientes comandos:
 Generar los recursos de swagger:
 
 ```bash
-mvn mvn generate-sources
+mvn generate-sources
 ```
 
 Compilar el proyecto:
@@ -51,27 +51,27 @@ mvn clean install
 Para iniciarlo bastará con el comando:
 
 ```bash
-java -jar boot/target/price-manager-web-back-boot-1.0.0.jar
+java -jar boot/target/price-manager-boot-1.0.0.jar
 ```
 
 ### Swagger de la aplicación
 
 Accede a la interfaz de Swagger en el siguiente enlace:
 
-* [Open API sswagger 3.0](https://github.com/NAO2503/price-manager-web-back/blob/main/driving/api-rest/contracts/openapi.yaml)
+* [Open API sswagger 3.0](https://github.com/NAO0325/price-manager/blob/main/driving/api-rest/contracts/openapi.yaml)
 
 ### Pruebas
 
 Recomendamos utilizar Postman importando la colección desde este enlace:
 
-* [Price.postman_collection.json](https://github.com/NAO2503/price-manager-web-back/blob/main/driving/api-rest/postman/Price.postman_collection.json)
+* [Price.postman_collection.json](https://github.com/NAO0325/price-manager/blob/main/driving/api-rest/postman/Price.postman_collection.json)
 
 #### Visualización interactiva
 
 Puedes visualizar la API de forma interactiva a través de estos enlaces:
 
-[![API Docs](https://img.shields.io/badge/API%20Docs-Swagger-green)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/NAO2503/price-manager-web-back/main/driving/api-rest/contracts/openapi.yaml)
-[![API Docs](https://img.shields.io/badge/API%20Docs-Redoc-orange)](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/NAO2503/price-manager-web-back/main/driving/api-rest/contracts/openapi.yaml)
+[![API Docs](https://img.shields.io/badge/API%20Docs-Swagger-green)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/NAO0325/price-manager/main/driving/api-rest/contracts/openapi.yaml)
+[![API Docs](https://img.shields.io/badge/API%20Docs-Redoc-orange)](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/NAO0325/price-manager/main/driving/api-rest/contracts/openapi.yaml)
 
 #### Endpoints principales
 
@@ -79,7 +79,7 @@ Puedes visualizar la API de forma interactiva a través de estos enlaces:
 |--------|------|-------------|
 | GET | `/v1/price/findByBrandProductBetweenDate` | Obtiene el precio aplicable según marca, producto y fecha de consulta |
 
-### Ejemplo de petición <font color="green">GET</font>
+### Ejemplo de petición
 
 * http://localhost:9090/v1/price/findByBrandProductBetweenDate?dateQuery=2020-06-14T2010:00:00Z&productId=35455&brandId=1
 

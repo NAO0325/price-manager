@@ -21,6 +21,7 @@
     <sonar.projectKey>NAO0325_price-manager</sonar.projectKey>
     <sonar.organization>nao0325</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
   </properties>
   <dependencies>
     <dependency>

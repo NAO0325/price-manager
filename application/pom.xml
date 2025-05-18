@@ -7,6 +7,10 @@
     <name>price-manager-application</name>
     <description>price-manager-application</description>
 
+    <properties>
+        <sonar.projectKey>NAO0325_price-manager-application</sonar.projectKey>
+    </properties>
+
     <parent>
         <groupId>com.price.manager</groupId>
         <artifactId>price-manager</artifactId>

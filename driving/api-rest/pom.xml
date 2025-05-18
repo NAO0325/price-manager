@@ -15,6 +15,7 @@
     </parent>
 
     <properties>
+        <sonar.projectKey>NAO0325_price-manager-api-rest</sonar.projectKey>
         <openapi-generator.version>7.0.1</openapi-generator.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
     </properties>

@@ -17,6 +17,10 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
     <mapstruct.version>1.4.2.Final</mapstruct.version>
+    <!-- Sonar Cloud -->
+    <sonar.projectKey>NAO0325_price-manager</sonar.projectKey>
+    <sonar.organization>nao0325</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
   <dependencies>
     <dependency>
@@ -86,4 +90,13 @@
     <module>driven/repository-sql</module>
     <module>boot</module>
   </modules>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.9.1.2184</version>
+      </plugin>
+    </plugins>
+  </build>
 </project>

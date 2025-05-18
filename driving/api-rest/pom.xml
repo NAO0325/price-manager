@@ -85,8 +85,8 @@
                             </globalProperties>
                             <inputSpec>${project.basedir}/contracts/openapi.yaml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>com.price.manager.back.driving.controllers.api</apiPackage>
-                            <modelPackage>com.price.manager.back.driving.controllers.models</modelPackage>
+                            <apiPackage>com.price.manager.driving.controllers.api</apiPackage>
+                            <modelPackage>com.price.manager.driving.controllers.models</modelPackage>
                             <output>${project.build.directory}/generated-sources/openapi</output>
                             <configOptions>
                                 <useSpringBoot3>true</useSpringBoot3>

@@ -1,5 +1,7 @@
 # Lista de Precios MS Spring Boot
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=NAO0325_price-manager&metric=alert_status)](https://sonarcloud.io/summary/overall?id=NAO0325_price-manager&branch=main)
+
 Desarrollo de un microservicio implementando clean code y arquitectura hexagonal con el framework SpringBoot.
 
 Esta aplicación utiliza una Base de Datos H2, que es una Base de Datos en memoria.

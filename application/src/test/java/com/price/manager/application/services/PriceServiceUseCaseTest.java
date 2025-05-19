@@ -37,7 +37,7 @@ class PriceServiceUseCaseTest {
     @Test
     void findByBrandProductBetweenEmptyList() {
         // given
-        var dateTest = LocalDateTime.of(2020,6,14, 10, 0, 0); //"2020-06-14 10:00:00";
+        var dateTest = LocalDateTime.of(2020,6,14, 10, 0, 0);
 
         // when
         when(priceRepositoryPort.findAllByBrandIdAndProductIdBetweenDates(anyLong(), anyLong(), any()))
@@ -53,7 +53,7 @@ class PriceServiceUseCaseTest {
     void findByBrandProductBetweenDateTest1() {
 
         // given
-        var dateTest = LocalDateTime.of(2020,6,14, 10, 0, 0); //"2020-06-14 10:00:00";
+        var dateTest = LocalDateTime.of(2020,6,14, 10, 0, 0);
 
         // when
         when(priceRepositoryPort.findAllByBrandIdAndProductIdBetweenDates(anyLong(), anyLong(), any()))
@@ -70,7 +70,7 @@ class PriceServiceUseCaseTest {
     void findByBrandProductBetweenDateTest2() {
 
         // given
-        var dateTest = LocalDateTime.of(2020,6,14, 16, 0, 0); //"2020-06-14 16:00:00";
+        var dateTest = LocalDateTime.of(2020,6,14, 16, 0, 0);
 
         // when
         when(priceRepositoryPort.findAllByBrandIdAndProductIdBetweenDates(anyLong(), anyLong(), any()))
@@ -87,7 +87,7 @@ class PriceServiceUseCaseTest {
     void findByBrandProductBetweenDateTest3() {
 
         // given
-        var dateTest = LocalDateTime.of(2020,6,14, 21, 0, 0); //"2020-06-14 21:00:00";
+        var dateTest = LocalDateTime.of(2020,6,14, 21, 0, 0);
 
         // when
         when(priceRepositoryPort.findAllByBrandIdAndProductIdBetweenDates(anyLong(), anyLong(), any()))
@@ -104,7 +104,7 @@ class PriceServiceUseCaseTest {
     void findByBrandProductBetweenDateTest4() {
 
         // given
-        var dateTest = LocalDateTime.of(2020,6,15, 10, 0, 0); //"2020-06-15 10:00:00";
+        var dateTest = LocalDateTime.of(2020,6,15, 10, 0, 0);
 
         // when
         when(priceRepositoryPort.findAllByBrandIdAndProductIdBetweenDates(anyLong(), anyLong(), any()))
@@ -121,7 +121,7 @@ class PriceServiceUseCaseTest {
     void findByBrandProductBetweenDateTest5() {
 
         // given
-        var dateTest = LocalDateTime.of(2020,6,15, 21, 0, 0); //"2020-06-15 21:00:00";
+        var dateTest = LocalDateTime.of(2020,6,15, 21, 0, 0);
 
         // when
         when(priceRepositoryPort.findAllByBrandIdAndProductIdBetweenDates(anyLong(), anyLong(), any()))

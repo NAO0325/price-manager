@@ -19,7 +19,7 @@ class PriceMapperTest {
     private PriceMapper priceMapper;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mocks = new PriceMocks();
         priceMapper = Mappers.getMapper(PriceMapper.class);
     }

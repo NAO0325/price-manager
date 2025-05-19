@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PriceControllerAdapter.class)
 @ContextConfiguration(classes = {PriceControllerAdapter.class, CustomExceptionHandler.class})
-public class PriceControllerAdapterMvcTest {
+class PriceControllerAdapterMvcTest {
 
     private PriceMocks mocks;
 
@@ -40,7 +40,7 @@ public class PriceControllerAdapterMvcTest {
     private PriceServicePort priceServicePort;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mocks = new PriceMocks();
     }
 

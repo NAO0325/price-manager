@@ -144,6 +144,8 @@ price-manager/
 
 ### Componentes Principales
 
+![Componentes Arquitectura](images/hexagonal-driving-driven2.png)
+
 - **🧠 Application**: Define puertos driving/driven y contiene la lógica de negocio pura
 - **🔵 Driving Side**: Adaptadores que permiten al exterior interactuar con el dominio (API REST)
 - **🔴 Driven Side**: Adaptadores que permiten al dominio interactuar con sistemas externos (Base de datos)
@@ -254,6 +256,10 @@ El proyecto incluye **5 casos de prueba principales** basados en los datos de ej
 
 Importa y ejecuta la colección de Postman para probar todos los endpoints:
 - [Price.postman_collection.json](driving/api-rest/postman/Price.postman_collection.json)
+
+![Ejemplo Postman](images/postman_v1.png)
+
+![Test Postman](images/postman_v1_tests.png)
 
 ## 🔧 Desarrollo
 
@@ -451,7 +457,7 @@ Si tienes preguntas o sugerencias:
 - 📧 **Email:** napoavi@gmail.com
 - 🐙 **GitHub Issues:** [Issues](https://github.com/NAO0325/price-manager/issues)
 - 💬 **Discusiones:** [Discussions](https://github.com/NAO0325/price-manager/discussions)
-- 🔗 **LinkedIn:** [Napoleon Avila Ochoa](https://linkedin.com/in/napoleon-avila-ochoa)
+- 🔗 **LinkedIn:** [Napoleon Avila Ochoa](https://www.linkedin.com/in/napoleon-avila-ochoa-b9127558/)
 
 ---
 

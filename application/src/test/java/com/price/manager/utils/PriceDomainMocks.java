@@ -1,4 +1,4 @@
-package com.price.manager.application.utils;
+package com.price.manager.utils;
 
 import com.price.manager.domain.Price;
 

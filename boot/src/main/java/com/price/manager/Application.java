@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
+        "com.price.manager.domain",
         "com.price.manager.application",
         "com.price.manager.boot",
         "com.price.manager.driven.repositories",

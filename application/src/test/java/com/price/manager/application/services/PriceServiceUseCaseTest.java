@@ -1,9 +1,9 @@
 package com.price.manager.application.services;
 
 import com.price.manager.application.ports.driven.PriceRepositoryPort;
+import com.price.manager.domain.criteria.PriceSearchCriteria;
 import com.price.manager.utils.PriceDomainMocks;
 import com.price.manager.domain.Price;
-import com.price.manager.domain.services.PriceSelectionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,29 +15,23 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PriceServiceUseCaseTest {
 
-    private PriceDomainMocks mocks;
-
     @Mock
     private PriceRepositoryPort priceRepositoryPort;
 
-    @Mock
-    private PriceSelectionService priceSelectionService;
-
     @InjectMocks
     private PriceServiceUseCase priceServiceUseCase;
+
+    private PriceDomainMocks mocks;
 
     @BeforeEach
     void setUp() {
@@ -45,40 +39,60 @@ class PriceServiceUseCaseTest {
     }
 
     @Test
-    void findByBrandProductBetweenDate_WithEmptyList_ShouldReturnNull() {
+    void findByBrandProductBetweenDate_WithValidParameters_ShouldReturnPrice() {
         // Given
-        var dateTest = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
+        var brandId = 1L;
+        var productId = 35455L;
+        var queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
+        var expectedPrice = mocks.mockListTest1().get(0); // Precio base: 35.5
 
-        when(priceRepositoryPort.findByCriteria(any()))
-                .thenReturn(List.of());
-        when(priceSelectionService.selectBestPrice(List.of()))
+        when(priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
+                .thenReturn(Optional.of(expectedPrice));
+
+        // When
+        var result = priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(expectedPrice, result);
+        assertEquals(35.5, result.getPrice());
+        assertEquals(0, result.getPriority());
+        assertEquals(1L, result.getPriceList());
+
+        verify(priceRepositoryPort, times(1)).findBestPrice(any(PriceSearchCriteria.class));
+    }
+
+    @Test
+    void findByBrandProductBetweenDate_WithNoResults_ShouldReturnNull() {
+        // Given
+        var brandId = 1L;
+        var productId = 35455L;
+        var queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
+
+        when(priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
                 .thenReturn(Optional.empty());
 
         // When
-        var result = priceServiceUseCase.findByBrandProductBetweenDate(3L, 1L, dateTest);
+        var result = priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
 
         // Then
         assertNull(result);
-        verify(priceRepositoryPort, times(1)).findByCriteria(any());
-        verify(priceSelectionService, times(1)).selectBestPrice(List.of());
+        verify(priceRepositoryPort, times(1)).findBestPrice(any(PriceSearchCriteria.class));
     }
 
     @ParameterizedTest(name = "Test {index}: {3} - Expected price: {4}")
-    @MethodSource("providePriceTestScenarios")
-    void findByBrandProductBetweenDate_ParameterizedTests(
+    @MethodSource("provideRealBusinessScenarios")
+    void findByBrandProductBetweenDate_RealBusinessScenarios_ShouldReturnCorrectPrice(
             Long brandId,
             Long productId,
             LocalDateTime queryDate,
             String testDescription,
             double expectedPrice,
-            List<Price> mockPrices,
-            Price expectedSelectedPrice) {
+            Price mockPrice) {
 
-        // Given
-        when(priceRepositoryPort.findByCriteria(any()))
-                .thenReturn(mockPrices);
-        when(priceSelectionService.selectBestPrice(mockPrices))
-                .thenReturn(Optional.of(expectedSelectedPrice));
+        // Given - Usar mocks reales de casos de negocio
+        when(priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
+                .thenReturn(Optional.of(mockPrice));
 
         // When
         var result = priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
@@ -87,30 +101,27 @@ class PriceServiceUseCaseTest {
         assertNotNull(result, "Result should not be null for: " + testDescription);
         assertEquals(brandId, result.getBrandId(), "Brand ID should match");
         assertEquals(productId, result.getProductId(), "Product ID should match");
-        assertEquals(expectedPrice, result.getPrice(), "Price should match expected value");
+        assertEquals(expectedPrice, result.getPrice(), "Price should match expected value for: " + testDescription);
 
-        verify(priceRepositoryPort, times(1)).findByCriteria(any());
-        verify(priceSelectionService, times(1)).selectBestPrice(mockPrices);
+        verify(priceRepositoryPort, times(1)).findBestPrice(any(PriceSearchCriteria.class));
     }
 
-    static Stream<Arguments> providePriceTestScenarios() {
+    static Stream<Arguments> provideRealBusinessScenarios() {
         var mocks = new PriceDomainMocks();
 
         return Stream.of(
                 Arguments.of(
                         1L, 35455L,
                         LocalDateTime.of(2020, 6, 14, 10, 0, 0),
-                        "Test 1: Single price at 10:00",
+                        "Test 1: Morning query - base price should apply",
                         35.5,
-                        mocks.mockListTest1(),
                         mocks.mockListTest1().get(0)
                 ),
                 Arguments.of(
                         1L, 35455L,
                         LocalDateTime.of(2020, 6, 14, 16, 0, 0),
-                        "Test 2: Multiple prices at 16:00 - priority 1 wins",
+                        "Test 2: Afternoon promotion - higher priority price should apply",
                         25.45,
-                        mocks.mockListTest2(),
                         mocks.mockListTest2().stream()
                                 .filter(p -> p.getPriority() == 1)
                                 .findFirst()
@@ -119,17 +130,15 @@ class PriceServiceUseCaseTest {
                 Arguments.of(
                         1L, 35455L,
                         LocalDateTime.of(2020, 6, 14, 21, 0, 0),
-                        "Test 3: Single price at 21:00",
+                        "Test 3: Evening query - base price should apply",
                         35.5,
-                        mocks.mockListTest3(),
                         mocks.mockListTest3().get(0)
                 ),
                 Arguments.of(
                         1L, 35455L,
                         LocalDateTime.of(2020, 6, 15, 10, 0, 0),
-                        "Test 4: Multiple prices at 10:00 - priority 1 wins",
+                        "Test 4: Morning special price - higher priority should win",
                         30.5,
-                        mocks.mockListTest4(),
                         mocks.mockListTest4().stream()
                                 .filter(p -> p.getPriority() == 1)
                                 .findFirst()
@@ -137,10 +146,9 @@ class PriceServiceUseCaseTest {
                 ),
                 Arguments.of(
                         1L, 35455L,
-                        LocalDateTime.of(2020, 6, 15, 21, 0, 0),
-                        "Test 5: Multiple prices at 21:00 - priority 1 wins",
+                        LocalDateTime.of(2020, 6, 16, 21, 0, 0),
+                        "Test 5: Premium evening price - higher priority should win",
                         38.95,
-                        mocks.mockListTest5(),
                         mocks.mockListTest5().stream()
                                 .filter(p -> p.getPriority() == 1)
                                 .findFirst()
@@ -155,19 +163,92 @@ class PriceServiceUseCaseTest {
         var brandId = 1L;
         var productId = 35455L;
         var queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
-        var mockPrices = mocks.mockListTest1();
-        var expectedPrice = mockPrices.get(0);
+        var expectedPrice = mocks.mockListTest1().get(0);
 
-        when(priceRepositoryPort.findByCriteria(any()))
-                .thenReturn(mockPrices);
-        when(priceSelectionService.selectBestPrice(mockPrices))
+        when(priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
                 .thenReturn(Optional.of(expectedPrice));
 
         // When
         priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
 
-        // Then - Verify that criteria is created and passed correctly
-        verify(priceRepositoryPort, times(1)).findByCriteria(any());
-        verify(priceSelectionService, times(1)).selectBestPrice(mockPrices);
+        // Then
+        verify(priceRepositoryPort).findBestPrice(argThat(criteria ->
+                criteria.brandId().equals(brandId) &&
+                        criteria.productId().equals(productId) &&
+                        criteria.queryDate().equals(queryDate)
+        ));
+    }
+
+    @Test
+    void findByBrandProductBetweenDate_ShouldBeEfficient() {
+        // Given
+        var brandId = 1L;
+        var productId = 35455L;
+        var queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
+        var mockPrice = mocks.mockListTest1().get(0);
+
+        when(priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
+                .thenReturn(Optional.of(mockPrice));
+
+        // When
+        var result = priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(mockPrice, result);
+
+        verify(priceRepositoryPort, times(1)).findBestPrice(any());
+        verifyNoMoreInteractions(priceRepositoryPort);
+    }
+
+    @Test
+    void findByBrandProductBetweenDate_WithHighPriorityScenario_ShouldReturnCorrectPrice() {
+        // Given
+        var brandId = 1L;
+        var productId = 35455L;
+        var queryDate = LocalDateTime.of(2020, 6, 14, 16, 0, 0); // Hora de promoción
+
+        var highPriorityPrice = mocks.mockListTest2().stream()
+                .filter(p -> p.getPriority() == 1)
+                .findFirst()
+                .orElseThrow();
+
+        when(priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
+                .thenReturn(Optional.of(highPriorityPrice));
+
+        // When
+        var result = priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(25.45, result.getPrice());
+        assertEquals(1, result.getPriority());
+        assertEquals(2L, result.getPriceList());
+        assertEquals("EUR", result.getCurr());
+
+        verify(priceRepositoryPort, times(1)).findBestPrice(any(PriceSearchCriteria.class));
+    }
+
+    @Test
+    void findByBrandProductBetweenDate_WithDateBoundaryConditions_ShouldWork() {
+        // Given
+        var brandId = 1L;
+        var productId = 35455L;
+
+        var boundaryDate = LocalDateTime.of(2020, 6, 14, 0, 0, 0);
+        var mockPrice = mocks.mockListTest1().get(0);
+
+        when(priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
+                .thenReturn(Optional.of(mockPrice));
+
+        // When
+        var result = priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, boundaryDate);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(35.5, result.getPrice());
+        assertEquals(boundaryDate, result.getStartDate());
+
+        verify(priceRepositoryPort, times(1)).findBestPrice(any(PriceSearchCriteria.class));
     }
 }

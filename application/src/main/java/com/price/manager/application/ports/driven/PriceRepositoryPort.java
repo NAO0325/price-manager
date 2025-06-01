@@ -8,8 +8,5 @@ import java.util.Optional;
 
 public interface PriceRepositoryPort {
 
-    List<Price> findByCriteria(PriceSearchCriteria priceSearchCriteria);
-
     Optional<Price> findBestPrice(PriceSearchCriteria criteria);
-
 }

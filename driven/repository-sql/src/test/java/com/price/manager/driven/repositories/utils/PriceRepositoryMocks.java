@@ -4,7 +4,6 @@ import com.price.manager.domain.Price;
 import com.price.manager.driven.repositories.models.PriceEntity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class PriceRepositoryMocks {
 
@@ -32,9 +31,5 @@ public class PriceRepositoryMocks {
                 .price(35.5)
                 .curr("EUR")
                 .build();
-    }
-
-    public List<PriceEntity> mockEntityListTest() {
-        return List.of(createPriceEntity());
     }
 }

@@ -14,7 +14,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.time.ZoneOffset;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class CustomExceptionHandlerTest {
@@ -29,17 +31,17 @@ class CustomExceptionHandlerTest {
 
     @BeforeEach
     void setUp() {
-        exceptionHandler = new CustomExceptionHandler();
+        this.exceptionHandler = new CustomExceptionHandler();
     }
 
     @Test
-    void handleNotFound_ShouldReturnNotFoundErrorResponse() {
+    void handleNotFoundShouldReturnNotFoundErrorResponse() {
         // Given
-        String errorMessage = "Price not found for the given criteria";
-        PriceNotFoundException exception = new PriceNotFoundException(errorMessage);
+        final String errorMessage = "Price not found for the given criteria";
+        final PriceNotFoundException exception = new PriceNotFoundException(errorMessage);
 
         // When
-        ResponseEntity<Error> response = exceptionHandler.handleNotFound(exception, webRequest);
+        final ResponseEntity<Error> response = this.exceptionHandler.handleNotFound(exception, this.webRequest);
 
         // Then
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -51,13 +53,13 @@ class CustomExceptionHandlerTest {
     }
 
     @Test
-    void handleNumberFormat_ShouldReturnBadRequestErrorResponse() {
+    void handleNumberFormatShouldReturnBadRequestErrorResponse() {
         // Given
-        String errorMessage = "For input string: \"abc\"";
-        NumberFormatException exception = new NumberFormatException(errorMessage);
+        final String errorMessage = "For input string: \"abc\"";
+        final NumberFormatException exception = new NumberFormatException(errorMessage);
 
         // When
-        ResponseEntity<Error> response = exceptionHandler.handleNumberFormat(exception, webRequest);
+        final ResponseEntity<Error> response = this.exceptionHandler.handleNumberFormat(exception, this.webRequest);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -69,21 +71,21 @@ class CustomExceptionHandlerTest {
     }
 
     @Test
-    void handleTypeMismatch_ShouldReturnBadRequestErrorResponse() {
+    void handleTypeMismatchShouldReturnBadRequestErrorResponse() {
         // Given
-        String parameterName = "productId";
-        String errorMessage = "Invalid product ID format";
+        final String parameterName = "productId";
+        final String errorMessage = "Invalid product ID format";
 
-        MethodArgumentTypeMismatchException exception = new MethodArgumentTypeMismatchException(
+        final MethodArgumentTypeMismatchException exception = new MethodArgumentTypeMismatchException(
                 "abc",
                 Long.class,
                 parameterName,
-                methodParameter,
+                this.methodParameter,
                 new NumberFormatException(errorMessage)
         );
 
         // When
-        ResponseEntity<Error> response = exceptionHandler.handleTypeMismatch(exception, webRequest);
+        final ResponseEntity<Error> response = this.exceptionHandler.handleTypeMismatch(exception, this.webRequest);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -95,13 +97,13 @@ class CustomExceptionHandlerTest {
     }
 
     @Test
-    void handleAllExceptions_ShouldReturnInternalServerErrorResponse() {
+    void handleAllExceptionsShouldReturnInternalServerErrorResponse() {
         // Given
-        String errorMessage = "Database connection failed";
-        Exception exception = new RuntimeException(errorMessage);
+        final String errorMessage = "Database connection failed";
+        final Exception exception = new RuntimeException(errorMessage);
 
         // When
-        ResponseEntity<Error> response = exceptionHandler.handleAllExceptions(exception, webRequest);
+        final ResponseEntity<Error> response = this.exceptionHandler.handleAllExceptions(exception, this.webRequest);
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
@@ -113,12 +115,12 @@ class CustomExceptionHandlerTest {
     }
 
     @Test
-    void handleAllExceptions_ShouldReturnInternalServerErrorResponseForNullMessage() {
+    void handleAllExceptionsShouldReturnInternalServerErrorResponseForNullMessage() {
         // Given
-        Exception exception = new RuntimeException();
+        final Exception exception = new RuntimeException();
 
         // When
-        ResponseEntity<Error> response = exceptionHandler.handleAllExceptions(exception, webRequest);
+        final ResponseEntity<Error> response = this.exceptionHandler.handleAllExceptions(exception, this.webRequest);
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
@@ -129,12 +131,12 @@ class CustomExceptionHandlerTest {
     }
 
     @Test
-    void timestamp_ShouldBeInUtcFormat() {
+    void timestampShouldBeInUtcFormat() {
         // Given
-        Exception exception = new RuntimeException("Test error");
+        final Exception exception = new RuntimeException("Test error");
 
         // When
-        ResponseEntity<Error> response = exceptionHandler.handleAllExceptions(exception, webRequest);
+        final ResponseEntity<Error> response = this.exceptionHandler.handleAllExceptions(exception, this.webRequest);
 
         // Then
         assertNotNull(response.getBody());

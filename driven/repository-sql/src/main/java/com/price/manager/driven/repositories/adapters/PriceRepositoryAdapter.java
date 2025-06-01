@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-
 @RequiredArgsConstructor
 @Service
 public class PriceRepositoryAdapter implements PriceRepositoryPort {
@@ -21,10 +20,9 @@ public class PriceRepositoryAdapter implements PriceRepositoryPort {
 
     @Override
     public Optional<Price> findBestPrice(PriceSearchCriteria priceSearchCriteria) {
-        return repository.findBestPriceByBrandIdAndProductIdAtDate(
+        return this.repository.findBestPriceByBrandIdAndProductIdAtDate(
                 priceSearchCriteria.brandId(),
-                priceSearchCriteria.productId(),
-                priceSearchCriteria.queryDate()
-        ).map(mapper::toDomain);
+                priceSearchCriteria.productId(), priceSearchCriteria.queryDate()
+        ).map(this.mapper::toDomain);
     }
 }

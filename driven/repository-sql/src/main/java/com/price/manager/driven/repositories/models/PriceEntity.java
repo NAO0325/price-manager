@@ -1,7 +1,10 @@
 package com.price.manager.driven.repositories.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,30 +17,30 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PriceEntity implements Serializable {
 
-    @Id
-    @Column(name = "PRICE_LIST", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long priceList;
+	@Id
+	@Column(name = "PRICE_LIST", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long priceList;
 
-    @Column(name = "START_DATE", nullable = false)
-    private LocalDateTime startDate;
+	@Column(name = "START_DATE", nullable = false)
+	private LocalDateTime startDate;
 
-    @Column(name = "END_DATE", nullable = false)
-    private LocalDateTime endDate;
+	@Column(name = "END_DATE", nullable = false)
+	private LocalDateTime endDate;
 
-    @Column(name = "BRAND_ID", nullable = false)
-    private Long brandId;
+	@Column(name = "BRAND_ID", nullable = false)
+	private Long brandId;
 
-    @Column(name = "PRODUCT_ID", nullable = false)
-    private Long productId;
+	@Column(name = "PRODUCT_ID", nullable = false)
+	private Long productId;
 
-    @Column(name = "PRIORITY", nullable = false)
-    private Integer priority;
+	@Column(name = "PRIORITY", nullable = false)
+	private Integer priority;
 
-    @Column(name = "PRICE", nullable = false)
-    private Double price;
+	@Column(name = "PRICE", nullable = false)
+	private Double price;
 
-    @Column(name = "CURR", nullable = false)
-    private String curr;
+	@Column(name = "CURR", nullable = false)
+	private String curr;
 
 }

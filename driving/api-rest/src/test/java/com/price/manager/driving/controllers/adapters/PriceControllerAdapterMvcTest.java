@@ -20,9 +20,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PriceControllerAdapter.class)
 @ContextConfiguration(classes = {PriceControllerAdapter.class, CustomExceptionHandler.class})
@@ -41,19 +44,19 @@ class PriceControllerAdapterMvcTest {
 
     @BeforeEach
     void setup() {
-        mocks = new PriceMocks();
+        this.mocks = new PriceMocks();
     }
 
     @Test
-    void whenValidInputTest1_thenReturns200() throws Exception {
+    void whenValidInputTest1ThenReturns200() throws Exception {
         // Given
-        when(priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
+        when(this.priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
                 .thenReturn(Price.builder().build());
-        when(priceMapper.toResponseDto(any()))
-                .thenReturn(mocks.createPriceResponse1());
+        when(this.priceMapper.toResponseDto(any()))
+                .thenReturn(this.mocks.createPriceResponse1());
 
         // When & Then
-        mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
+        this.mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
                         .param("dateQuery", "2020-06-14T10:00:00Z")
                         .param("productId", "35455")
                         .param("brandId", "1"))
@@ -67,15 +70,15 @@ class PriceControllerAdapterMvcTest {
     }
 
     @Test
-    void whenValidInputTest2_thenReturns200() throws Exception {
+    void whenValidInputTest2ThenReturns200() throws Exception {
         // Given
-        when(priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
+        when(this.priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
                 .thenReturn(Price.builder().build());
-        when(priceMapper.toResponseDto(any()))
-                .thenReturn(mocks.createPriceResponse2());
+        when(this.priceMapper.toResponseDto(any()))
+                .thenReturn(this.mocks.createPriceResponse2());
 
         // When & Then
-        mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
+        this.mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
                         .param("dateQuery", "2020-06-14T16:00:00Z")
                         .param("productId", "35455")
                         .param("brandId", "1"))
@@ -89,15 +92,15 @@ class PriceControllerAdapterMvcTest {
     }
 
     @Test
-    void whenValidInputTest3_thenReturns200() throws Exception {
+    void whenValidInputTest3ThenReturns200() throws Exception {
         // Given
-        when(priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
+        when(this.priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
                 .thenReturn(Price.builder().build());
-        when(priceMapper.toResponseDto(any()))
-                .thenReturn(mocks.createPriceResponse3());
+        when(this.priceMapper.toResponseDto(any()))
+                .thenReturn(this.mocks.createPriceResponse3());
 
         // When & Then
-        mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
+        this.mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
                         .param("dateQuery", "2020-06-14T21:00:00Z")
                         .param("productId", "35455")
                         .param("brandId", "1"))
@@ -111,15 +114,15 @@ class PriceControllerAdapterMvcTest {
     }
 
     @Test
-    void whenValidInputTest4_thenReturns200() throws Exception {
+    void whenValidInputTest4ThenReturns200() throws Exception {
         // Given
-        when(priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
+        when(this.priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
                 .thenReturn(Price.builder().build());
-        when(priceMapper.toResponseDto(any()))
-                .thenReturn(mocks.createPriceResponse4());
+        when(this.priceMapper.toResponseDto(any()))
+                .thenReturn(this.mocks.createPriceResponse4());
 
         // When & Then
-        mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
+        this.mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
                         .param("dateQuery", "2020-06-16T21:00:00Z")
                         .param("productId", "35455")
                         .param("brandId", "1"))
@@ -134,9 +137,9 @@ class PriceControllerAdapterMvcTest {
 
 
     @Test
-    void whenBadRequest_thenReturns400() throws Exception {
+    void whenBadRequestThenReturns400() throws Exception {
         // When & Then
-        mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
+        this.mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
                         .param("dateQuery", "2020-06-14T10:00:00")
                         .param("productId", "35455")
                         .param("brandId", "8"))
@@ -148,9 +151,9 @@ class PriceControllerAdapterMvcTest {
     }
 
     @Test
-    void whenPriceNotFound_thenReturns404() throws Exception {
+    void whenPriceNotFoundThenReturns404() throws Exception {
         // When & Then
-        mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
+        this.mvc.perform(get("/v1/price/findByBrandProductBetweenDate")
                         .param("dateQuery", "2020-06-14T10:00:00Z")
                         .param("productId", "35455")
                         .param("brandId", "8"))
@@ -167,5 +170,5 @@ class PriceControllerAdapterMvcTest {
                     .build();
         }
     }
-
 }
+

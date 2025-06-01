@@ -17,7 +17,9 @@ import java.time.ZoneOffset;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PriceControllerAdapterTest {
@@ -34,38 +36,39 @@ class PriceControllerAdapterTest {
 
     @Test
     void returnPriceDataOK() {
-        var dateTest = LocalDateTime.of(2020, 6, 14, 10, 0, 0)
+        final var dateTest = LocalDateTime.of(2020, 6, 14, 10, 0, 0)
                 .atOffset(ZoneOffset.UTC);
 
-        when(priceMapper.toResponseDto(any())).thenReturn(new PriceResponse());
-        when(priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
+        when(this.priceMapper.toResponseDto(any())).thenReturn(new PriceResponse());
+        when(this.priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
                 .thenReturn(Price.builder().startDate(LocalDateTime.now()).build());
-        var result = priceRestController.findByBrandProductBetweenDate(2L, 2L, dateTest);
+        final var result = this.priceRestController.findByBrandProductBetweenDate(2L, 2L, dateTest);
         assertNotNull(result);
     }
 
     @Test
     void returnNumberFormatException() {
 
-        var dateTest = LocalDateTime.of(2020, 6, 14, 10, 0, 0)
+        final var dateTest = LocalDateTime.of(2020, 6, 14, 10, 0, 0)
                 .atOffset(ZoneOffset.UTC);
 
         willThrow(new NumberFormatException("exception"))
-                .given(priceServicePort).findByBrandProductBetweenDate(anyLong(), anyLong(), any());
+                .given(this.priceServicePort).findByBrandProductBetweenDate(anyLong(), anyLong(), any());
         assertThrows(NumberFormatException.class, () ->
-            priceRestController.findByBrandProductBetweenDate(3L, 1L, dateTest)
+                this.priceRestController.findByBrandProductBetweenDate(3L, 1L, dateTest)
         );
     }
 
     @Test
     void returnResourceNotFoundException() {
-        var dateTest = LocalDateTime.of(2020, 6, 14, 10, 0, 0)
+        final var dateTest = LocalDateTime.of(2020, 6, 14, 10, 0, 0)
                 .atOffset(ZoneOffset.UTC);
 
-        when(priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
+        when(this.priceServicePort.findByBrandProductBetweenDate(anyLong(), anyLong(), any()))
                 .thenReturn(null);
         assertThrows(PriceNotFoundException.class, () ->
-            priceRestController.findByBrandProductBetweenDate(2L, 2L, dateTest)
+                this.priceRestController.findByBrandProductBetweenDate(2L, 2L, dateTest)
         );
     }
 }
+

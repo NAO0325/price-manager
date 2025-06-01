@@ -14,15 +14,15 @@ import java.time.ZoneOffset;
 @Mapper(componentModel = "spring")
 public interface PriceMapper {
 
-    @Mapping(target = "id", source = "priceList")
-    @Mapping(target = "startDate", expression = "java(toUtcOffsetDateTime(price.getStartDate()))")
-    @Mapping(target = "endDate", expression = "java(toUtcOffsetDateTime(price.getEndDate()))")
-    PriceResponse toResponseDto(Price price);
+	@Mapping(target = "id", source = "priceList")
+	@Mapping(target = "startDate", expression = "java(toUtcOffsetDateTime(price.getStartDate()))")
+	@Mapping(target = "endDate", expression = "java(toUtcOffsetDateTime(price.getEndDate()))")
+	PriceResponse toResponseDto(Price price);
 
-    default OffsetDateTime toUtcOffsetDateTime(LocalDateTime localDateTime) {
-        if (localDateTime == null) {
-            return null;
-        }
-        return localDateTime.atOffset(ZoneOffset.UTC);
-    }
+	default OffsetDateTime toUtcOffsetDateTime(LocalDateTime localDateTime) {
+		if (localDateTime == null) {
+			return null;
+		}
+		return localDateTime.atOffset(ZoneOffset.UTC);
+	}
 }

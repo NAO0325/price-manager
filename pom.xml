@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.price.manager</groupId>
   <artifactId>price-manager</artifactId>
@@ -24,6 +24,15 @@
     <sonar.aggregate>true</sonar.aggregate>
     <sonar.skipModules>false</sonar.skipModules>
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+    <!-- Checkstyle -->
+    <checkstyle.version>10.12.4</checkstyle.version>
+    <checkstyle.plugin.version>3.3.1</checkstyle.plugin.version>
+    <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
+    <checkstyle.suppressions.location>checkstyle-suppressions.xml</checkstyle.suppressions.location>
+    <checkstyle.violationSeverity>warning</checkstyle.violationSeverity>
+    <checkstyle.consoleOutput>true</checkstyle.consoleOutput>
+    <checkstyle.failOnViolation>true</checkstyle.failOnViolation>
+    <checkstyle.includeTestSourceDirectory>true</checkstyle.includeTestSourceDirectory>
   </properties>
   <dependencies>
     <dependency>
@@ -98,6 +107,30 @@
     <module>driven/repository-sql</module>
     <module>boot</module>
   </modules>
+  <reporting>
+    <plugins>
+      <!-- Checkstyle Reports -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.plugin.version}</version>
+        <configuration>
+          <configLocation>${checkstyle.config.location}</configLocation>
+          <suppressionsLocation>${checkstyle.suppressions.location}</suppressionsLocation>
+          <linkXRef>false</linkXRef>
+          <includeTestSourceDirectory>${checkstyle.includeTestSourceDirectory}</includeTestSourceDirectory>
+          <excludes>**/generated-sources/**/*,**/target/**/*,**/Application.java</excludes>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
   <build>
     <plugins>
       <plugin>
@@ -121,6 +154,37 @@
             <phase>test</phase>
             <goals>
               <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Checkstyle Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.plugin.version}</version>
+        <configuration>
+          <configLocation>${checkstyle.config.location}</configLocation>
+          <suppressionsLocation>${checkstyle.suppressions.location}</suppressionsLocation>
+          <consoleOutput>${checkstyle.consoleOutput}</consoleOutput>
+          <failsOnError>${checkstyle.failOnViolation}</failsOnError>
+          <linkXRef>false</linkXRef>
+          <includeTestSourceDirectory>${checkstyle.includeTestSourceDirectory}</includeTestSourceDirectory>
+          <excludes>**/generated-sources/**/*,**/target/**/*,**/Application.java</excludes>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>${checkstyle.version}</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>checkstyle-validation</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
             </goals>
           </execution>
         </executions>

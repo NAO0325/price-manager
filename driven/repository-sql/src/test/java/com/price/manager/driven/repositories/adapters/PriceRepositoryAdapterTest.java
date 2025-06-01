@@ -14,12 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PriceRepositoryAdapterTest {
@@ -37,22 +38,21 @@ class PriceRepositoryAdapterTest {
 
     @BeforeEach
     void setUp() {
-        mocks = new PriceRepositoryMocks();
+        this.mocks = new PriceRepositoryMocks();
     }
 
     @Test
-    void findBestPrice_ShouldReturnOptionalPrice() {
+    void findBestPriceShouldReturnOptionalPrice() {
         // Given
-        var criteria = PriceSearchCriteria.of(1L, 35455L, LocalDateTime.of(2020, 6, 14, 10, 0, 0));
+        final var criteria = PriceSearchCriteria.of(1L, 35455L, LocalDateTime.of(2020, 6, 14, 10, 0, 0));
 
-        when(repository.findBestPriceByBrandIdAndProductIdAtDate(anyLong(), anyLong(), any()))
-                .thenReturn(Optional.of(mocks.createPriceEntity()));
+        when(this.repository.findBestPriceByBrandIdAndProductIdAtDate(anyLong(), anyLong(), any()))
+                .thenReturn(Optional.of(this.mocks.createPriceEntity()));
 
-        when(mapper.toDomain(any()))
-                .thenReturn(mocks.createPrice());
+        when(this.mapper.toDomain(any())).thenReturn(this.mocks.createPrice());
 
         // When
-        var result = priceRepositoryAdapter.findBestPrice(criteria);
+        final var result = this.priceRepositoryAdapter.findBestPrice(criteria);
 
         // Then
         assertTrue(result.isPresent());
@@ -60,37 +60,37 @@ class PriceRepositoryAdapterTest {
         assertEquals(35455L, result.get().getProductId());
         assertEquals(35.5, result.get().getPrice());
 
-        verify(repository, times(1)).findBestPriceByBrandIdAndProductIdAtDate(1L, 35455L, criteria.queryDate());
-        verify(mapper, times(1)).toDomain(any());
+        verify(this.repository, times(1)).findBestPriceByBrandIdAndProductIdAtDate(1L, 35455L, criteria.queryDate());
+        verify(this.mapper, times(1)).toDomain(any());
     }
 
     @Test
-    void findBestPrice_WithNoResult_ShouldReturnEmptyOptional() {
+    void findBestPriceWithNoResultShouldReturnEmptyOptional() {
         // Given
-        var criteria = PriceSearchCriteria.of(1L, 35455L, LocalDateTime.of(2020, 6, 14, 10, 0, 0));
+        final var criteria = PriceSearchCriteria.of(1L, 35455L, LocalDateTime.of(2020, 6, 14, 10, 0, 0));
 
-        when(repository.findBestPriceByBrandIdAndProductIdAtDate(anyLong(), anyLong(), any()))
+        when(this.repository.findBestPriceByBrandIdAndProductIdAtDate(anyLong(), anyLong(), any()))
                 .thenReturn(Optional.empty());
 
         // When
-        var result = priceRepositoryAdapter.findBestPrice(criteria);
+        final var result = this.priceRepositoryAdapter.findBestPrice(criteria);
 
         // Then
         assertTrue(result.isEmpty());
 
-        verify(repository, times(1)).findBestPriceByBrandIdAndProductIdAtDate(1L, 35455L, criteria.queryDate());
-        verify(mapper, times(0)).toDomain(any());
+        verify(this.repository, times(1)).findBestPriceByBrandIdAndProductIdAtDate(1L, 35455L, criteria.queryDate());
+        verify(this.mapper, times(0)).toDomain(any());
     }
 
     @Test
-    void priceSearchCriteria_ShouldCreateCorrectly() {
+    void priceSearchCriteriaShouldCreateCorrectly() {
         // Given
-        var brandId = 1L;
-        var productId = 35455L;
-        var queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
+        final var brandId = 1L;
+        final var productId = 35455L;
+        final var queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
 
         // When
-        var criteria = PriceSearchCriteria.of(brandId, productId, queryDate);
+        final var criteria = PriceSearchCriteria.of(brandId, productId, queryDate);
 
         // Then
         assertEquals(brandId, criteria.brandId());

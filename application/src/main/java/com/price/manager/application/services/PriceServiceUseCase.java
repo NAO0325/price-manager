@@ -1,6 +1,5 @@
 package com.price.manager.application.services;
 
-
 import com.price.manager.application.ports.driven.PriceRepositoryPort;
 import com.price.manager.application.ports.driving.PriceServicePort;
 import com.price.manager.domain.Price;
@@ -18,9 +17,8 @@ public class PriceServiceUseCase implements PriceServicePort {
 
     @Override
     public Price findByBrandProductBetweenDate(Long brandId, Long productId, LocalDateTime dateBetween) {
-        var criteria = PriceSearchCriteria.of(brandId, productId, dateBetween);
-        return priceRepositoryPort.findBestPrice(criteria).orElse(null);
+        final var criteria = PriceSearchCriteria.of(brandId, productId, dateBetween);
+        return this.priceRepositoryPort.findBestPrice(criteria).orElse(null);
     }
 
 }
-

@@ -9,7 +9,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 class PriceMapperTest {
@@ -20,16 +22,16 @@ class PriceMapperTest {
 
     @BeforeEach
     void setup() {
-        mocks = new PriceMocks();
-        priceMapper = Mappers.getMapper(PriceMapper.class);
+        this.mocks = new PriceMocks();
+        this.priceMapper = Mappers.getMapper(PriceMapper.class);
     }
 
     @Test
     void toResponseDto() {
-        var start = LocalDateTime.of(2022, 1, 1, 1, 30, 59);
-        var end = LocalDateTime.of(2022,1,31,1,30,59);
-        var price = mocks.createPrice();
-        var priceResponse = priceMapper.toResponseDto(price);
+        final var start = LocalDateTime.of(2022, 1, 1, 1, 30, 59);
+        final var end = LocalDateTime.of(2022, 1, 31, 1, 30, 59);
+        final var price = this.mocks.createPrice();
+        final var priceResponse = this.priceMapper.toResponseDto(price);
         assertNotNull(priceResponse);
         assertEquals(1L, priceResponse.getBrandId());
         assertEquals(25.45, priceResponse.getPrice());
@@ -40,10 +42,10 @@ class PriceMapperTest {
 
     @Test
     void toResponseDtoWithNullEndDate() {
-        var start = LocalDateTime.of(2022, 1, 1, 1, 30, 59);
-        var price = mocks.createPrice();
+        final var start = LocalDateTime.of(2022, 1, 1, 1, 30, 59);
+        final var price = this.mocks.createPrice();
         price.setEndDate(null);
-        var priceResponse = priceMapper.toResponseDto(price);
+        final var priceResponse = this.priceMapper.toResponseDto(price);
         assertNotNull(priceResponse);
         assertEquals(1L, priceResponse.getBrandId());
         assertEquals(25.45, priceResponse.getPrice());
@@ -51,5 +53,5 @@ class PriceMapperTest {
         assertEquals(start, priceResponse.getStartDate().toLocalDateTime());
         assertNull(priceResponse.getEndDate());
     }
-
 }
+

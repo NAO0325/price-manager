@@ -7,6 +7,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface PriceEntityMapper {
 
-    Price toDomain(PriceEntity entity);
+	Price toDomain(PriceEntity entity);
 
 }

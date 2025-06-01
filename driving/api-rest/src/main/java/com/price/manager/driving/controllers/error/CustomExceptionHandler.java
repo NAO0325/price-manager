@@ -17,40 +17,40 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PriceNotFoundException.class)
     protected ResponseEntity<Error> handleNotFound(PriceNotFoundException ex, WebRequest request) {
-        Error error = new Error();
+        final Error error = new Error();
         error.setCode("PRICE_NOT_FOUND");
         error.setMessage(ex.getMessage());
-        error.setTimestamp(nowToUtcOffsetDateTime());
+        error.setTimestamp(this.nowToUtcOffsetDateTime());
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NumberFormatException.class)
     protected ResponseEntity<Error> handleNumberFormat(NumberFormatException ex, WebRequest request) {
-        Error error = new Error();
+        final Error error = new Error();
         error.setCode("INVALID_FORMAT");
         error.setMessage("Invalid format: " + ex.getMessage());
-        error.setTimestamp(nowToUtcOffsetDateTime());
+        error.setTimestamp(this.nowToUtcOffsetDateTime());
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<Error> handleTypeMismatch(MethodArgumentTypeMismatchException ex, WebRequest request) {
-        Error error = new Error();
+        final Error error = new Error();
         error.setCode("INVALID_PARAMETER");
         error.setMessage("Parameter '" + ex.getName() + "' must be valid: " + ex.getMessage());
-        error.setTimestamp(nowToUtcOffsetDateTime());
+        error.setTimestamp(this.nowToUtcOffsetDateTime());
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Error> handleAllExceptions(Exception ex, WebRequest request) {
-        Error error = new Error();
+        final Error error = new Error();
         error.setCode("INTERNAL_SERVER_ERROR");
         error.setMessage("An unexpected error occurred: " + ex.getMessage());
-        error.setTimestamp(nowToUtcOffsetDateTime());
+        error.setTimestamp(this.nowToUtcOffsetDateTime());
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

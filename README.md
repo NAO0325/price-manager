@@ -385,9 +385,9 @@ mvn clean compile test-compile test
 
 #### IDE Recomendado
 - **IntelliJ IDEA** con plugins:
-    - Lombok Plugin
-    - MapStruct Support
-    - SonarLint
+  - Lombok Plugin
+  - MapStruct Support
+  - SonarLint
 
 #### Configuración Git Hooks
 ```bash

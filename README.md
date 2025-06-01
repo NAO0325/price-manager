@@ -96,50 +96,59 @@ La aplicación implementa una arquitectura hexagonal (Ports & Adapters) donde el
 
 ```
 price-manager/
-├── 📁 application/                     # 🧠 Lógica de negocio y puertos
-│   ├── 📁 domain/                     # Entidades del dominio
-│   │   └── 📄 Price.java              # Entidad principal Price
-│   ├── 📁 ports/                      # Interfaces (driving/driven)
-│   │   ├── 📁 driving/               # Puertos de entrada
-│   │   │   └── 📄 PriceServicePort.java
-│   │   └── 📁 driven/                # Puertos de salida
-│   │       └── 📄 PriceRepositoryPort.java
-│   └── 📁 services/                   # Casos de uso
-│       └── 📄 PriceServiceUseCase.java
-├── 📁 driving/                         # 🔵 Adaptadores de entrada
-│   └── 📁 api-rest/                   # Controladores REST
-│       ├── 📁 adapters/              # Implementación de controladores
-│       │   └── 📄 PriceControllerAdapter.java
-│       ├── 📁 mappers/               # Mappers MapStruct
-│       │   └── 📄 PriceMapper.java
-│       ├── 📁 models/                # DTOs generados por OpenAPI
-│       ├── 📁 error/                 # Manejo de excepciones
-│       │   ├── 📄 CustomExceptionHandler.java
-│       │   └── 📄 PriceNotFoundException.java
-│       ├── 📁 contracts/             # Especificación OpenAPI
-│       │   └── 📄 openapi.yaml
-│       └── 📁 postman/               # Colección de Postman
-│           └── 📄 Price.postman_collection.json
-├── 📁 driven/                          # 🔴 Adaptadores de salida
-│   └── 📁 repository-sql/             # Implementación JPA/H2
-│       ├── 📁 adapters/              # Implementación de repositorios
-│       │   └── 📄 PriceRepositoryAdapter.java
-│       ├── 📁 models/                # Entidades JPA
-│       │   └── 📄 PriceEntity.java
-│       ├── 📁 mappers/               # Mappers de entidad
-│       │   └── 📄 PriceEntityMapper.java
-│       ├── 📁 config/                # Configuración JPA
-│       │   └── 📄 RepositoryConfig.java
-│       └── 📄 PriceJpaRepository.java # Repository JPA
-├── 📁 boot/                            # 🚀 Configuración y arranque
-│   ├── 📁 src/main/java/              # Clase principal
-│   │   └── 📄 Application.java
-│   └── 📁 src/main/resources/         # Configuración
-│       ├── 📄 application.yml
-│       └── 📄 init.sql               # Datos iniciales
-├── 📁 .github/workflows/               # ⚙️ CI/CD
-│   └── 📄 build.yml                   # GitHub Actions
-└── 📄 pom.xml                          # Configuración Maven principal
+├── 📁 application/                                    # 🧠 Lógica de negocio y puertos
+│   ├── 📁 domain/                                    # Entidades del dominio
+│   │   ├── 📄 Price.java                            # Entidad principal Price
+│   │   └── 📁 criteria/                             # Criterios de búsqueda
+│   │       └── 📄 PriceSearchCriteria.java          # Criterio búsqueda Price
+│   ├── 📁 ports/                                    # Interfaces (driving/driven)
+│   │   ├── 📁 driving/                              # Puertos de entrada
+│   │   │   └── 📄 PriceServicePort.java             # Puerto servicio Price
+│   │   └── 📁 driven/                               # Puertos de salida
+│   │       └── 📄 PriceRepositoryPort.java          # Puerto repositorio Price
+│   └── 📁 services/                                 # Casos de uso
+│       └── 📄 PriceServiceUseCase.java              # Caso de uso principal
+├── 📁 driving/                                        # 🔵 Adaptadores de entrada
+│   └── 📁 api-rest/                                 # Controladores REST
+│       ├── 📁 adapters/                             # Implementación de controladores
+│       │   └── 📄 PriceControllerAdapter.java       # Controlador REST Price
+│       ├── 📁 mappers/                              # Mappers MapStruct
+│       │   └── 📄 PriceMapper.java                  # Mapper Price DTO
+│       ├── 📁 models/                               # DTOs generados por OpenAPI
+│       │   ├── 📄 PriceResponse.java                # DTO respuesta Price
+│       │   └── 📄 Error.java                        # DTO errores
+│       ├── 📁 error/                                # Manejo de excepciones
+│       │   ├── 📄 CustomExceptionHandler.java       # Manejador global excepciones
+│       │   └── 📄 PriceNotFoundException.java       # Excepción Price no encontrado
+│       ├── 📁 contracts/                            # Especificación OpenAPI
+│       │   └── 📄 openapi.yaml                      # Especificación API REST
+│       └── 📁 postman/                              # Colección de Postman
+│           └── 📄 Price.postman_collection.json     # Tests Postman
+├── 📁 driven/                                         # 🔴 Adaptadores de salida
+│   └── 📁 repository-sql/                           # Implementación JPA/H2
+│       ├── 📁 adapters/                             # Implementación de repositorios
+│       │   └── 📄 PriceRepositoryAdapter.java       # Adaptador repositorio JPA
+│       ├── 📁 models/                               # Entidades JPA
+│       │   └── 📄 PriceEntity.java                  # Entidad JPA Price
+│       ├── 📁 mappers/                              # Mappers de entidad
+│       │   └── 📄 PriceEntityMapper.java            # Mapper entidad-dominio
+│       ├── 📁 config/                               # Configuración JPA
+│       │   └── 📄 RepositoryConfig.java             # Config repositorios JPA
+│       └── 📄 PriceJpaRepository.java               # Repository JPA Spring Data
+├── 📁 boot/                                           # 🚀 Configuración y arranque
+│   ├── 📁 src/main/java/                            # Clase principal
+│   │   └── 📄 Application.java                      # Clase main Spring Boot
+│   └── 📁 src/main/resources/                       # Configuración
+│       ├── 📄 application.yml                       # Config aplicación
+│       └── 📄 init.sql                              # Datos iniciales H2
+├── 📁 .github/workflows/                              # ⚙️ CI/CD
+│   └── 📄 build.yml                                 # GitHub Actions pipeline
+├── 📄 checkstyle.xml                                 # Configuración Checkstyle
+├── 📄 checkstyle-suppressions.xml                   # Supresiones Checkstyle
+├── 📄 .gitignore                                     # Archivos ignorados Git
+├── 📄 .gitattributes                                # Atributos Git
+├── 📄 README.md                                      # Documentación principal
+└── 📄 pom.xml                                        # Configuración Maven principal
 ```
 
 ### Componentes Principales
@@ -288,6 +297,12 @@ mvn sonar:sonar
 # Ejecutar en modo desarrollo
 mvn spring-boot:run -pl boot
 
+# Verificación de estilo de código con Checkstyle
+mvn checkstyle:check
+
+# Generar reporte de Checkstyle
+mvn checkstyle:checkstyle
+
 # Generar documentación JavaDoc
 mvn javadoc:javadoc
 
@@ -355,6 +370,22 @@ mvn clean compile test-compile test
 # Ver boot/pom.xml para configuración correcta
 ```
 
+**📏 Errores de Checkstyle:**
+```bash
+# Ver errores específicos de estilo
+mvn checkstyle:check
+
+# Generar reporte detallado
+mvn checkstyle:checkstyle
+open target/site/checkstyle.html
+
+# Errores comunes y soluciones:
+# - Línea muy larga (>120 chars): Dividir la línea
+# - Import no utilizado: Eliminar imports innecesarios
+# - Espacios inconsistentes: Usar indentación de 4 espacios
+# - Magic numbers: Extraer constantes con nombres descriptivos
+```
+
 **🗃️ Error conexión H2:**
 ```bash
 # Verificar que la aplicación esté ejecutándose
@@ -376,10 +407,14 @@ mvn clean compile test-compile test
 
 - ✅ Seguir **principios SOLID**
 - ✅ Cobertura de tests **> 80%**
+- ✅ **Checkstyle** sin violaciones (`mvn checkstyle:check`)
 - ✅ Documentar código público con **JavaDoc**
 - ✅ Usar **Lombok** para reducir boilerplate
 - ✅ Aplicar **Clean Code** y patrones de diseño
 - ✅ Seguir convención de commits: `feat:`, `fix:`, `docs:`, `test:`
+- ✅ Máximo 120 caracteres por línea
+- ✅ Indentación de 4 espacios
+- ✅ No usar `System.out.println` (usar logging apropiado)
 
 ### Configuración de Desarrollo
 
@@ -404,7 +439,52 @@ chmod +x .git/hooks/pre-commit
 - **SonarCloud:** [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=NAO0325_price-manager&metric=alert_status)](https://sonarcloud.io/summary/overall?id=NAO0325_price-manager&branch=main)
 - **Cobertura de Tests:** JaCoCo (generado en `target/site/jacoco/`)
 - **Análisis Estático:** SonarCloud integrado con GitHub Actions
+- **Checkstyle:** Verificación de estilo de código configurado
 - **CI/CD:** GitHub Actions con build automático en push/PR
+
+### Checkstyle - Análisis de Estilo de Código
+
+El proyecto incluye **Checkstyle** para mantener un estilo de código consistente y seguir las mejores prácticas de Java.
+
+#### Ejecutar Verificación de Checkstyle
+
+```bash
+# Verificar estilo de código (falla si hay violaciones)
+mvn checkstyle:check
+
+# Generar reporte de Checkstyle sin fallar
+mvn checkstyle:checkstyle
+
+# Ver reporte HTML generado
+open target/site/checkstyle.html
+```
+
+#### Configuración de Checkstyle
+
+| Archivo | Propósito |
+|---------|-----------|
+| `checkstyle.xml` | Configuración principal con reglas de estilo |
+| `checkstyle-suppressions.xml` | Supresiones para casos específicos |
+
+#### Reglas Principales Configuradas
+
+- **Longitud de línea**: Máximo 120 caracteres
+- **Imports**: No usar imports con `*`, eliminar imports no utilizados
+- **Espacios en blanco**: Formateo consistente de espacios
+- **Llaves**: Posición consistente de llaves `{}`
+- **Nombres**: Convenciones de nomenclatura para clases, métodos, variables
+- **Complejidad**: Máximo 15 de complejidad ciclomática por método
+- **Magic Numbers**: Evitar números mágicos en el código
+- **Logging**: No usar `System.out.println`, usar logging apropiado
+
+#### Supresiones Configuradas
+
+El archivo `checkstyle-suppressions.xml` incluye supresiones para:
+
+- **Archivos generados**: DTOs y APIs generados por OpenAPI
+- **Tests**: Relajación de reglas para clases de test
+- **Entidades JPA**: Flexibilidad para entidades y mappers
+- **Spring Boot**: Excepciones para clases de configuración
 
 ### GitHub Actions
 
@@ -414,6 +494,7 @@ El proyecto incluye CI/CD automatizado que ejecuta en cada push:
 # .github/workflows/build.yml
 - ✅ Build con Maven
 - ✅ Ejecución de tests
+- ✅ Verificación de Checkstyle
 - ✅ Generación de reportes JaCoCo
 - ✅ Análisis de SonarCloud
 - ✅ Cache de dependencias Maven

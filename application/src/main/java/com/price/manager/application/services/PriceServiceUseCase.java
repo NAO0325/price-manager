@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+/**
+ * Caso de uso para gestión de precios.
+ * <p>
+ * ✅ RESPONSABILIDAD ÚNICA: Solo orquesta, NO contiene lógica de dominio
+ * ✅ DELEGACIÓN CORRECTA: La lógica compleja está en el repositorio o dominio
+ */
 @Service
 @RequiredArgsConstructor
 public class PriceServiceUseCase implements PriceServicePort {

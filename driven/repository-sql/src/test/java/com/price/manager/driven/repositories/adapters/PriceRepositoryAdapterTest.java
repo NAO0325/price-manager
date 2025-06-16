@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -58,7 +59,7 @@ class PriceRepositoryAdapterTest {
         assertTrue(result.isPresent());
         assertEquals(1L, result.get().getBrandId());
         assertEquals(35455L, result.get().getProductId());
-        assertEquals(35.5, result.get().getPrice());
+        assertEquals(new BigDecimal("35.50"), result.get().getPrice());
 
         verify(this.repository, times(1)).findBestPriceByBrandIdAndProductIdAtDate(1L, 35455L, criteria.queryDate());
         verify(this.mapper, times(1)).toDomain(any());

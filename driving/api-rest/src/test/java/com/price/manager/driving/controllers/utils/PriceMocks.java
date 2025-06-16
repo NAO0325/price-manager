@@ -3,6 +3,7 @@ package com.price.manager.driving.controllers.utils;
 import com.price.manager.domain.Price;
 import com.price.manager.driving.controllers.models.PriceResponse;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -14,14 +15,14 @@ public class PriceMocks {
                 .priceList(2L)
                 .brandId(1L)
                 .productId(35455L)
-                .price(25.45)
+                .price(new BigDecimal("25.45"))
                 .startDate(LocalDateTime.of(2022, 1, 1, 1, 30, 59))
                 .endDate(LocalDateTime.of(2022, 1, 31, 1, 30, 59))
                 .build();
     }
 
     public PriceResponse createPriceResponse1() {
-        PriceResponse response = new PriceResponse();
+        final PriceResponse response = new PriceResponse();
         response.setId(1L);
         response.setBrandId(1L);
         response.setPrice(35.50);
@@ -35,7 +36,7 @@ public class PriceMocks {
     }
 
     public PriceResponse createPriceResponse2() {
-        PriceResponse response = new PriceResponse();
+        final PriceResponse response = new PriceResponse();
         response.setId(2L);
         response.setBrandId(1L);
         response.setPrice(25.45);
@@ -50,7 +51,7 @@ public class PriceMocks {
     }
 
     public PriceResponse createPriceResponse3() {
-        PriceResponse response = new PriceResponse();
+        final PriceResponse response = new PriceResponse();
         response.setId(3L);
         response.setBrandId(1L);
         response.setPrice(30.50);
@@ -64,7 +65,7 @@ public class PriceMocks {
     }
 
     public PriceResponse createPriceResponse4() {
-        PriceResponse response = new PriceResponse();
+        final PriceResponse response = new PriceResponse();
         response.setId(4L);
         response.setBrandId(1L);
         response.setPrice(38.95);

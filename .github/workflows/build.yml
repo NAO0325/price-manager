@@ -14,6 +14,11 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      # Validate Conventional Commits
+      - name: Validate Conventional Commits
+        run: |
+          chmod +x scripts/validate-commits.sh
+          ./scripts/validate-commits.sh
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:

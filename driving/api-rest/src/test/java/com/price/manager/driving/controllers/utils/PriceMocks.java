@@ -41,10 +41,10 @@ public class PriceMocks {
     }
 
     public PriceResponse createTestPriceResponse() {
-        return this.createPriceResponseFor(1L, 35455L, 35455.0, 2L);
+        return this.createPriceResponseFor(1L, 35455.0, 2L);
     }
 
-    public PriceResponse createPriceResponseFor(Long brandId, Long productId, Double price, Long priceList) {
+    public PriceResponse createPriceResponseFor(Long brandId, Double price, Long priceList) {
         final var response = new PriceResponse();
         response.setBrandId(brandId);
         response.setPrice(price);

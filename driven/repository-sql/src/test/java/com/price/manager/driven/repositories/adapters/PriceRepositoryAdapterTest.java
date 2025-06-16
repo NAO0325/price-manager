@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -198,9 +197,9 @@ class PriceRepositoryAdapterTest {
 
         // Then - Verify exact parameters were passed
         verify(this.repository).findBestPriceByBrandIdAndProductIdAtDate(
-                eq(99L),
-                eq(12345L),
-                eq(LocalDateTime.of(2021, 3, 15, 14, 30, 45, 123456789))
+                99L,
+                12345L,
+                LocalDateTime.of(2021, 3, 15, 14, 30, 45, 123456789)
         );
     }
 

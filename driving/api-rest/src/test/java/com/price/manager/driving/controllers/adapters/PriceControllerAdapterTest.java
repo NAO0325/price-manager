@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -104,7 +103,7 @@ class PriceControllerAdapterTest {
         // Given
         final var dateQuery = OffsetDateTime.parse(dateQueryStr);
         final var domainPrice = this.mocks.createDomainPriceFor(brandId, productId, expectedPrice, expectedPriceList);
-        final var expectedResponse = this.mocks.createPriceResponseFor(brandId, productId, expectedPrice.doubleValue(),
+        final var expectedResponse = this.mocks.createPriceResponseFor(brandId, expectedPrice.doubleValue(),
                 expectedPriceList);
 
         when(this.priceServicePort.findByBrandProductBetweenDate(brandId, productId, dateQuery.toLocalDateTime()))
@@ -250,7 +249,7 @@ class PriceControllerAdapterTest {
         final var brandId = 1L;
         final var productId = 35455L;
 
-        when(this.priceServicePort.findByBrandProductBetweenDate(eq(brandId), eq(productId), eq(expectedLocalDateTime)))
+        when(this.priceServicePort.findByBrandProductBetweenDate(brandId, productId, expectedLocalDateTime))
                 .thenReturn(null);
         when(this.priceMapper.toResponseDto(null))
                 .thenReturn(null);
@@ -308,9 +307,9 @@ class PriceControllerAdapterTest {
 
         // Then - Verify exact parameters were passed
         verify(this.priceServicePort).findByBrandProductBetweenDate(
-                eq(99L),
-                eq(12345L),
-                eq(LocalDateTime.of(2021, 3, 15, 14, 30, 45, 987654321))
+                99L,
+                12345L,
+                LocalDateTime.of(2021, 3, 15, 14, 30, 45, 987654321)
         );
     }
 

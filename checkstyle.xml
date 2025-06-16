@@ -8,49 +8,156 @@
     <property name="severity" value="warning"/>
     <property name="fileExtensions" value="java"/>
 
-    <!-- Verificaciones a nivel de archivo -->
+    <!-- === CONFIGURACIÓN BÁSICA ALINEADA CON === -->
+
+    <!-- Longitud de línea: adoptar estándar -->
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
-        <property name="max" value="120"/>
+        <property name="max" value="140"/>
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
 
+    <!-- Soporte para formatter annotations -->
+    <module name="SuppressWithPlainTextCommentFilter">
+        <property name="offCommentFormat" value="@formatter:off"/>
+        <property name="onCommentFormat" value="@formatter:on"/>
+    </module>
+
+    <!-- Caracteres tab y whitespace -->
     <module name="NewlineAtEndOfFile"/>
-    <module name="FileTabCharacter"/>
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
+    <!-- Prohibir @author tags -->
+    <module name="RegexpSingleline">
+        <property name="fileExtensions" value="java"/>
+        <property name="format" value="^\s*\*\s*@author"/>
+        <property name="message" value="The 'author' tag is not allowed."/>
+    </module>
+
+    <!-- Header validation básico -->
+    <module name="RegexpHeader">
+        <property name="fileExtensions" value="java"/>
+        <property name="header" value="^(@|package).*"/>
+    </module>
 
     <module name="TreeWalker">
-        <!-- Verificaciones de imports -->
+
+        <!-- === ORDEN Y ESTRUCTURA === -->
+        <module name="DeclarationOrder"/>
+        <module name="OuterTypeFilename"/>
+        <module name="OneTopLevelClass"/>
+        <module name="OverloadMethodsDeclarationOrder"/>
+
+        <!-- === IMPORTS (Estilo adaptado) === -->
         <module name="AvoidStarImport"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
         <module name="IllegalImport"/>
 
-        <!-- Verificaciones de espacios en blanco -->
+        <module name="ImportOrder">
+            <property name="groups" value="java,com.price.manager,*"/>
+            <property name="staticGroups" value="java,com.price.manager,*"/>
+            <property name="option" value="top"/>
+            <property name="ordered" value="true"/>
+            <property name="sortStaticImportsAlphabetically" value="true"/>
+            <property name="separated" value="true"/>
+            <property name="separatedStaticGroups" value="true"/>
+        </module>
+
+        <!-- === ESPACIOS Y FORMATO === -->
         <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround"/>
+        <module name="WhitespaceAround">
+            <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
+            <property name="allowEmptyLoops" value="true"/>
+        </module>
         <module name="NoWhitespaceAfter"/>
         <module name="NoWhitespaceBefore"/>
         <module name="GenericWhitespace"/>
+
+        <!-- Líneas vacías con control estricto -->
         <module name="EmptyLineSeparator">
-            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+            <property name="allowNoEmptyLineBetweenFields" value="false"/>
+            <property name="allowMultipleEmptyLines" value="false"/>
+            <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
         </module>
 
-        <!-- Verificaciones de llaves y bloques -->
+        <!-- === LLAVES Y BLOQUES === -->
         <module name="LeftCurly"/>
-        <module name="RightCurly"/>
+        <module name="RightCurly">
+            <property name="id" value="RightCurlySame"/>
+            <property name="tokens" value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_DO"/>
+        </module>
+        <module name="RightCurly">
+            <property name="id" value="RightCurlyAlone"/>
+            <property name="option" value="alone"/>
+            <property name="tokens" value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT, INSTANCE_INIT"/>
+        </module>
         <module name="NeedBraces"/>
-        <module name="EmptyBlock"/>
+        <module name="EmptyBlock">
+            <property name="option" value="TEXT"/>
+            <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
+        </module>
 
-        <!-- Verificaciones de nombres -->
+        <!-- === NOMBRES === -->
         <module name="TypeName"/>
-        <module name="MemberName"/>
-        <module name="MethodName"/>
-        <module name="ParameterName"/>
-        <module name="LocalVariableName"/>
+        <module name="MemberName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+        </module>
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
+        </module>
+        <module name="ParameterName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+        </module>
+        <module name="LocalVariableName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+        </module>
         <module name="ConstantName"/>
-        <module name="PackageName"/>
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+        </module>
 
-        <!-- Verificaciones de codificación -->
+        <!-- === VALIDACIONES ESPECÍFICAS INDITEX === -->
+        <module name="AbbreviationAsWordInName">
+            <property name="ignoreFinal" value="false"/>
+            <property name="allowedAbbreviationLength" value="3"/>
+        </module>
+
+        <module name="VariableDeclarationUsageDistance"/>
+
+        <!-- === INDENTACIÓN (CONFIGURAR SEGÚN PREFERENCIA) === -->
+        <!-- OPCIÓN A: Mantener 4 espacios -->
+        <module name="Indentation">
+            <property name="basicOffset" value="4"/>
+            <property name="braceAdjustment" value="0"/>
+            <property name="caseIndent" value="4"/>
+        </module>
+
+        <!-- OPCIÓN B: Adoptar estándar 2 espacios -->
+        <!--
+        <module name="Indentation">
+          <property name="basicOffset" value="2"/>
+          <property name="braceAdjustment" value="0"/>
+          <property name="caseIndent" value="2"/>
+          <property name="throwsIndent" value="4"/>
+          <property name="lineWrappingIndentation" value="4"/>
+          <property name="arrayInitIndent" value="2"/>
+        </module>
+        -->
+
+        <!-- === JAVADOC (Simplificado pero efectivo) === -->
+        <module name="JavadocMethod">
+            <property name="accessModifiers" value="public"/>
+            <property name="allowMissingParamTags" value="true"/>
+            <property name="allowMissingReturnTag" value="true"/>
+            <property name="allowedAnnotations" value="Override, Test"/>
+        </module>
+
+        <!-- === OTRAS VALIDACIONES === -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
         <module name="DefaultComesLast"/>
@@ -58,16 +165,8 @@
         <module name="SimplifyBooleanReturn"/>
         <module name="OneStatementPerLine"/>
         <module name="MultipleVariableDeclarations"/>
-
-        <!-- Verificaciones de modificadores -->
         <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>
-
-        <!-- Verificaciones de diseño -->
-        <module name="OneTopLevelClass"/>
-        <module name="OuterTypeFilename"/>
-
-        <!-- Verificaciones de tamaño y complejidad -->
         <module name="MethodLength">
             <property name="max" value="80"/>
         </module>
@@ -77,8 +176,14 @@
         <module name="CyclomaticComplexity">
             <property name="max" value="15"/>
         </module>
+        <module name="MagicNumber">
+            <property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 1000"/>
+            <property name="ignoreHashCodeMethod" value="true"/>
+            <property name="ignoreAnnotation" value="true"/>
+            <property name="ignoreFieldDeclaration" value="true"/>
+        </module>
 
-        <!-- Evitar patrones problemáticos -->
+        <!-- === EVITAR PATRONES PROBLEMÁTICOS === -->
         <module name="RegexpSinglelineJava">
             <property name="format" value="System\.out\.println"/>
             <property name="message" value="Use proper logging instead of System.out.println"/>
@@ -88,20 +193,6 @@
             <property name="message" value="Use proper logging instead of System.err.println"/>
         </module>
 
-        <!-- Verificaciones de anotaciones -->
         <module name="MissingOverride"/>
-
-        <!-- Magic Numbers -->
-        <module name="MagicNumber">
-            <property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 1000"/>
-            <property name="ignoreHashCodeMethod" value="true"/>
-            <property name="ignoreAnnotation" value="true"/>
-            <property name="ignoreFieldDeclaration" value="true"/>
-        </module>
-
-        <!-- Indentación -->
-        <module name="Indentation">
-            <property name="basicOffset" value="4"/>
-        </module>
     </module>
 </module>

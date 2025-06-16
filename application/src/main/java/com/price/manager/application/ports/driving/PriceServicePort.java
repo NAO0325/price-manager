@@ -1,8 +1,8 @@
 package com.price.manager.application.ports.driving;
 
-import com.price.manager.domain.Price;
-
 import java.time.LocalDateTime;
+
+import com.price.manager.domain.Price;
 
 public interface PriceServicePort {
 

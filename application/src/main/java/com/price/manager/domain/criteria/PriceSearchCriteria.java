@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * Record que encapsula los criterios de búsqueda para consultar precios en el sistema.
  *
  * <p>Este criterio se utiliza para filtrar precios por marca, producto y fecha,
- * permitiendo encontrar el precio aplicable según las reglas de negocio de Inditex.</p>
+ * permitiendo encontrar el precio aplicable según las reglas de negocio.</p>
  *
  * <p><strong>Uso Típico:</strong></p>
  * <pre>{@code
@@ -27,7 +27,6 @@ import java.time.LocalDateTime;
  * @param productId identificador del producto (debe ser mayor que 0)
  * @param queryDate fecha para la cual se busca el precio aplicable
  *
- * @author Napoleon Avila Ochoa
  * @version 1.0.0
  * @since 1.0.0
  *

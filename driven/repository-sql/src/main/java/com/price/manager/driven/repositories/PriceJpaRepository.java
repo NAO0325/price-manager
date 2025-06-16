@@ -1,18 +1,19 @@
 package com.price.manager.driven.repositories;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import com.price.manager.driven.repositories.models.PriceEntity;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * Repositorio JPA para operaciones de persistencia sobre la entidad {@link PriceEntity}.
  *
  * <p>Este repositorio implementa la lógica de acceso a datos específica para la consulta
- * de precios según las reglas de negocio de Inditex, incluyendo filtrado temporal
+ * de precios según las reglas de negocio, incluyendo filtrado temporal
  * y selección por prioridad.</p>
  *
  * <h3>Consultas Especializadas:</h3>
@@ -31,7 +32,6 @@ import java.util.Optional;
  * CREATE INDEX idx_prices_priority ON PRICES(PRIORITY DESC, PRICE_LIST DESC);
  * </pre>
  *
- * @author Napoleon Avila Ochoa
  * @version 1.0.0
  * @since 1.0.0
  *
@@ -64,13 +64,13 @@ public interface PriceJpaRepository extends JpaRepository<PriceEntity, Long> {
      *
      * <h4>Ejemplos de Comportamiento:</h4>
      * <pre>{@code
-     * // Caso 1: Test Inditex - 14/06/2020 10:00 → Precio base
+     * // Caso 1: Test - 14/06/2020 10:00 → Precio base
      * Optional<PriceEntity> result1 = repository.findBestPriceByBrandIdAndProductIdAtDate(
      *     1L, 35455L, LocalDateTime.of(2020, 6, 14, 10, 0)
      * );
      * // result1.get().getPrice() == 35.50, result1.get().getPriceList() == 1
      *
-     * // Caso 2: Test Inditex - 14/06/2020 16:00 → Promoción (mayor prioridad)
+     * // Caso 2: Test - 14/06/2020 16:00 → Promoción (mayor prioridad)
      * Optional<PriceEntity> result2 = repository.findBestPriceByBrandIdAndProductIdAtDate(
      *     1L, 35455L, LocalDateTime.of(2020, 6, 14, 16, 0)
      * );

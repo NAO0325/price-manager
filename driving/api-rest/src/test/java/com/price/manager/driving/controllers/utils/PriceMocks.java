@@ -1,12 +1,12 @@
 package com.price.manager.driving.controllers.utils;
 
-import com.price.manager.domain.Price;
-import com.price.manager.driving.controllers.models.PriceResponse;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+
+import com.price.manager.domain.Price;
+import com.price.manager.driving.controllers.models.PriceResponse;
 
 public class PriceMocks {
 

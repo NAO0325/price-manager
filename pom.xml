@@ -267,6 +267,26 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>net.revelc.code</groupId>
+        <artifactId>impsort-maven-plugin</artifactId>
+        <version>1.9.0</version>
+        <configuration>
+          <groups>java.,com.price.manager.,*</groups>
+          <staticGroups>java,com.price.manager,*</staticGroups>
+          <staticAfter>false</staticAfter>
+          <removeUnused>true</removeUnused>
+          <treatSamePackageAsUnused>false</treatSamePackageAsUnused>
+        </configuration>
+        <executions>
+          <execution>
+            <id>sort-imports</id>
+            <goals>
+              <goal>sort</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>

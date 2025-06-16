@@ -1,5 +1,9 @@
 package com.price.manager.driven.repositories.models;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,10 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * Entidad JPA que representa la tabla PRICES en la base de datos H2.
@@ -96,7 +96,6 @@ import java.time.LocalDateTime;
  *   <li><strong>Índice de prioridad:</strong> (PRIORITY DESC, PRICE_LIST DESC)</li>
  * </ul>
  *
- * @author Napoleon Avila Ochoa
  * @version 1.0.0
  * @since 1.0.0
  *
@@ -156,7 +155,7 @@ public class PriceEntity implements Serializable {
     /**
      * Identificador de la marca propietaria del producto.
      *
-     * <p>Referencia a la marca en el sistema de Inditex. Ejemplo: 1 = ZARA.</p>
+     * <p>Referencia a la marca en el sistema. Ejemplo: 1 = ZARA.</p>
      *
      * <p><strong>Mapeo:</strong> Columna BRAND_ID, tipo BIGINT, NOT NULL</p>
      *

@@ -1,7 +1,14 @@
 package com.price.manager.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.stream.Stream;
+
 import com.price.manager.Application;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,12 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 /**
  * Tests de integración end-to-end para Price Manager.
  * <p>
@@ -30,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <p>
  * Este test reemplaza al ApplicationTest.java anterior que solo ejecutaba main() sin validar nada útil.
  *
- * @author Napoleon Avila Ochoa
  * @since 1.0.0
  */
 @SpringBootTest(

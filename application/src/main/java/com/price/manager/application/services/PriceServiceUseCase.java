@@ -1,13 +1,14 @@
 package com.price.manager.application.services;
 
+import java.time.LocalDateTime;
+
 import com.price.manager.application.ports.driven.PriceRepositoryPort;
 import com.price.manager.application.ports.driving.PriceServicePort;
 import com.price.manager.domain.Price;
 import com.price.manager.domain.criteria.PriceSearchCriteria;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 /**
  * Implementación del caso de uso principal para la gestión de precios.
@@ -50,7 +51,6 @@ import java.time.LocalDateTime;
  * }
  * }</pre>
  *
- * @author Napoleon Avila Ochoa
  * @version 1.0.0
  * @see PriceServicePort
  * @see PriceRepositoryPort

@@ -1,15 +1,16 @@
 package com.price.manager.driven.repositories.adapters;
 
+import java.util.Optional;
+
 import com.price.manager.application.ports.driven.PriceRepositoryPort;
 import com.price.manager.domain.Price;
 import com.price.manager.domain.criteria.PriceSearchCriteria;
 import com.price.manager.driven.repositories.PriceJpaRepository;
 import com.price.manager.driven.repositories.mappers.PriceEntityMapper;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 /**
  * Adaptador de repositorio que implementa el puerto de salida para persistencia de precios.
@@ -48,7 +49,6 @@ import java.util.Optional;
  *   <li><strong>Open/Closed:</strong> Extensible sin modificar código existente</li>
  * </ul>
  *
- * @author Napoleon Avila Ochoa
  * @version 1.0.0
  * @since 1.0.0
  *
@@ -82,7 +82,7 @@ public class PriceRepositoryAdapter implements PriceRepositoryPort {
      *
      * <p>Este método implementa la lógica de acceso a datos para el caso de uso principal
      * del sistema: encontrar el precio óptimo según las reglas de prioridad y vigencia
-     * temporal definidas en el dominio de Inditex.</p>
+     * temporal definidas en el dominio.</p>
      *
      * <h4>Proceso de Búsqueda:</h4>
      * <ol>

@@ -1,17 +1,18 @@
 package com.price.manager.driving.controllers.adapters;
 
+import java.time.OffsetDateTime;
+
 import com.price.manager.application.ports.driving.PriceServicePort;
 import com.price.manager.driving.controllers.api.PriceControllerApi;
 import com.price.manager.driving.controllers.error.PriceNotFoundException;
 import com.price.manager.driving.controllers.mappers.PriceMapper;
 import com.price.manager.driving.controllers.models.PriceResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.OffsetDateTime;
 
 /**
  * Adaptador REST que expone las funcionalidades de gestión de precios a través de HTTP.
@@ -51,7 +52,6 @@ import java.time.OffsetDateTime;
  * }
  * </pre>
  *
- * @author Napoleon Avila Ochoa
  * @version 1.0.0
  * @since 1.0.0
  *
@@ -83,7 +83,7 @@ public class PriceControllerAdapter implements PriceControllerApi {
     /**
      * Busca el precio aplicable para una marca y producto en una fecha específica.
      *
-     * <p>Este endpoint implementa el requerimiento principal de la API de precios de Inditex:
+     * <p>Este endpoint implementa el requerimiento principal de la API de precios:
      * dada una marca, producto y fecha, retorna el precio que debe aplicarse según las
      * reglas de prioridad y vigencia temporal.</p>
      *

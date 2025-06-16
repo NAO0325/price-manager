@@ -4,42 +4,46 @@
         "https://checkstyle.org/dtds/suppressions_1_2.dtd">
 
 <suppressions>
-    <!-- Suprimir verificaciones para archivos generados -->
+    <!-- === ARCHIVOS GENERADOS (Mantenemos supresión total) === -->
     <suppress files=".*[/\\]generated-sources[/\\].*" checks=".*"/>
     <suppress files=".*[/\\]target[/\\].*" checks=".*"/>
 
-    <!-- Suprimir Javadoc para clases de test y utilidades -->
-    <suppress files=".*Test\.java" checks="MissingJavadocType"/>
-    <suppress files=".*Test\.java" checks="MissingJavadocMethod"/>
-    <suppress files=".*Test\.java" checks="JavadocMethod"/>
-    <suppress files=".*Test\.java" checks="JavadocVariable"/>
-    <suppress files=".*Mocks?\.java" checks=".*"/>
-    <suppress files=".*Utils?\.java" checks="HideUtilityClassConstructor"/>
+    <!-- === PACKAGE-INFO === -->
+    <suppress checks="RegexpHeader" files="package-info.java"/>
 
-    <!-- Suprimir para DTOs y APIs generados por OpenAPI -->
+    <!-- === APIS Y MODELOS GENERADOS === -->
     <suppress files=".*[/\\]models[/\\].*\.java" checks=".*"/>
     <suppress files=".*[/\\]api[/\\].*Api\.java" checks=".*"/>
 
-    <!-- Excepciones específicas para Spring Boot y arquitectura hexagonal -->
+    <!-- === TESTS (Más selectivo que antes) === -->
+    <!-- Solo suprimir JavaDoc en tests, no todo -->
+    <suppress files=".*Test\.java" checks="MissingJavadocType"/>
+    <suppress files=".*Test\.java" checks="MissingJavadocMethod"/>
+    <suppress files=".*Test\.java" checks="JavadocMethod"/>
+
+    <!-- Permitir magic numbers en tests -->
+    <suppress files=".*Mocks?\.java" checks="MagicNumber"/>
+    <suppress files=".*Test\.java" checks="MagicNumber"/>
+
+    <!-- Permitir múltiples string literals en tests -->
+    <suppress files=".*Test\.java" checks="MultipleStringLiterals"/>
+
+    <!-- === CONFIGURACIÓN Y MAIN === -->
     <suppress files="Application\.java" checks="HideUtilityClassConstructor"/>
     <suppress files=".*Config\.java" checks="HideUtilityClassConstructor"/>
+
+    <!-- === ENTIDADES Y MAPPERS === -->
     <suppress files=".*Entity\.java" checks="MissingJavadocMethod"/>
     <suppress files=".*Entity\.java" checks="HiddenField"/>
     <suppress files=".*Mapper\.java" checks=".*"/>
 
-    <!-- Suprimir para records y criterios (Java moderno) -->
-    <suppress files=".*Record\.java" checks="FinalParameters"/>
-    <suppress files=".*Criteria\.java" checks=".*"/>
-
-    <!-- Excepciones para patrones del proyecto -->
+    <!-- === PATRONES ESPECÍFICOS DEL PROYECTO === -->
     <suppress files=".*\.java" checks="RequireThis"/>
     <suppress files=".*\.java" checks="DesignForExtension"/>
     <suppress files=".*\.java" checks="FinalParameters"/>
-    <suppress files=".*Test\.java" checks="MagicNumber"/>
-    <suppress files=".*Test\.java" checks="MultipleStringLiterals"/>
 
-    <!-- Permitir acoplamiento en controladores y servicios Spring -->
+    <!-- === ARQUITECTURA HEXAGONAL === -->
+    <!-- Permitir más acoplamiento en adaptadores -->
     <suppress files=".*Controller.*\.java" checks="ClassDataAbstractionCoupling"/>
-    <suppress files=".*Service.*\.java" checks="ClassDataAbstractionCoupling"/>
     <suppress files=".*Adapter\.java" checks="ClassDataAbstractionCoupling"/>
 </suppressions>

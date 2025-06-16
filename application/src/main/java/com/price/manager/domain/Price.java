@@ -1,19 +1,19 @@
 package com.price.manager.domain;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 /**
  * Entidad de dominio que representa un precio aplicable a un producto específico
  * de una marca durante un rango de fechas determinado.
  *
- * <p>Esta clase encapsula las reglas de negocio principales del sistema de precios
- * de Inditex, incluyendo la lógica de prioridad, validación de fechas y consistencia
+ * <p>Esta clase encapsula las reglas de negocio principales del sistema de precios,
+ * incluyendo la lógica de prioridad, validación de fechas y consistencia
  * de datos.</p>
  *
  * <p><strong>Reglas de Negocio:</strong></p>
@@ -40,7 +40,6 @@ import java.time.LocalDateTime;
  * boolean isValid = price.isValidAt(LocalDateTime.of(2020, 6, 14, 16, 0));
  * }</pre>
  *
- * @author Napoleon Avila Ochoa
  * @version 1.0.0
  * @since 1.0.0
  * @see com.price.manager.domain.criteria.PriceSearchCriteria
@@ -55,7 +54,7 @@ public class Price {
     /**
      * Identificador único de la marca a la que pertenece el producto.
      *
-     * <p>Ejemplo: 1 representa la marca ZARA en el sistema de Inditex.</p>
+     * <p>Ejemplo: 1 representa la marca ZARA en el sistema.</p>
      *
      */
     private Long brandId;

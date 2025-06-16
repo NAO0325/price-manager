@@ -10,71 +10,47 @@ import java.time.ZoneOffset;
 
 public class PriceMocks {
 
-    public Price createPrice() {
+    public Price createBasicPriceWithPriceList(Long priceList) {
         return Price.builder()
-                .priceList(2L)
                 .brandId(1L)
                 .productId(35455L)
-                .price(new BigDecimal("25.45"))
-                .startDate(LocalDateTime.of(2022, 1, 1, 1, 30, 59))
-                .endDate(LocalDateTime.of(2022, 1, 31, 1, 30, 59))
+                .priceList(priceList)
+                .price(new BigDecimal("35.50"))
+                .startDate(LocalDateTime.of(2020, 6, 14, 0, 0))
+                .endDate(LocalDateTime.of(2020, 12, 31, 23, 59))
+                .priority(0)
+                .curr("EUR")
                 .build();
     }
 
-    public PriceResponse createPriceResponse1() {
-        final PriceResponse response = new PriceResponse();
-        response.setId(1L);
-        response.setBrandId(1L);
-        response.setPrice(35.50);
-        response.setStartDate(
-                OffsetDateTime.of(
-                        LocalDateTime.of(2020, 6, 14, 0, 0, 0), ZoneOffset.UTC));
-        response.setEndDate(
-                OffsetDateTime.of(
-                        LocalDateTime.of(2020, 12, 31, 23, 59, 59), ZoneOffset.UTC));
-        return response;
+    public Price createTestDomainPrice() {
+        return this.createDomainPriceFor(1L, 35455L, new BigDecimal("35455.0"), 2L);
     }
 
-    public PriceResponse createPriceResponse2() {
-        final PriceResponse response = new PriceResponse();
-        response.setId(2L);
-        response.setBrandId(1L);
-        response.setPrice(25.45);
-        response.setStartDate(
-                OffsetDateTime.of(
-                        LocalDateTime.of(2020, 6, 14, 15, 0, 0), ZoneOffset.UTC));
-        response.setEndDate(
-                OffsetDateTime.of(
-                        LocalDateTime.of(2020, 6, 14, 18, 30, 0), ZoneOffset.UTC));
-        return response;
-
+    public Price createDomainPriceFor(Long brandId, Long productId, BigDecimal price, Long priceList) {
+        return Price.builder()
+                .brandId(brandId)
+                .productId(productId)
+                .priceList(priceList)
+                .price(price)
+                .startDate(LocalDateTime.of(2020, 6, 14, 0, 0))
+                .endDate(LocalDateTime.of(2020, 12, 31, 23, 59))
+                .priority(0)
+                .curr("EUR")
+                .build();
     }
 
-    public PriceResponse createPriceResponse3() {
-        final PriceResponse response = new PriceResponse();
-        response.setId(3L);
-        response.setBrandId(1L);
-        response.setPrice(30.50);
-        response.setStartDate(
-                OffsetDateTime.of(
-                        LocalDateTime.of(2020, 6, 15, 0, 0, 0), ZoneOffset.UTC));
-        response.setEndDate(
-                OffsetDateTime.of(
-                        LocalDateTime.of(2020, 6, 15, 11, 0, 0), ZoneOffset.UTC));
-        return response;
+    public PriceResponse createTestPriceResponse() {
+        return this.createPriceResponseFor(1L, 35455L, 35455.0, 2L);
     }
 
-    public PriceResponse createPriceResponse4() {
-        final PriceResponse response = new PriceResponse();
-        response.setId(4L);
-        response.setBrandId(1L);
-        response.setPrice(38.95);
-        response.setStartDate(
-                OffsetDateTime.of(
-                        LocalDateTime.of(2020, 6, 15, 16, 0, 0), ZoneOffset.UTC));
-        response.setEndDate(
-                OffsetDateTime.of(
-                        LocalDateTime.of(2020, 12, 31, 23, 59, 59), ZoneOffset.UTC));
+    public PriceResponse createPriceResponseFor(Long brandId, Long productId, Double price, Long priceList) {
+        final var response = new PriceResponse();
+        response.setBrandId(brandId);
+        response.setPrice(price);
+        response.setId(priceList);
+        response.setStartDate(OffsetDateTime.of(2020, 6, 14, 0, 0, 0, 0, ZoneOffset.UTC));
+        response.setEndDate(OffsetDateTime.of(2020, 12, 31, 23, 59, 59, 0, ZoneOffset.UTC));
         return response;
     }
 }

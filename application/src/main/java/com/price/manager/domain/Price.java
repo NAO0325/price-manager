@@ -48,7 +48,7 @@ public class Price {
     }
 
     /**
-     * Compara si este precio tiene mayor prioridad que otro según reglas de Inditex:
+     * Compara si este precio tiene mayor prioridad que otro según reglas de negocio:
      * 1. Mayor priority gana
      * 2. En caso de empate, mayor priceList gana
      *

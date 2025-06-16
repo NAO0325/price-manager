@@ -41,11 +41,11 @@ class PriceServiceUseCaseTest {
     @InjectMocks
     private PriceServiceUseCase priceServiceUseCase;
 
-    private static PriceDomainMocks mocks;
+    private PriceDomainMocks mocks;
 
     @BeforeEach
     void setUp() {
-        mocks = new PriceDomainMocks();
+        this.mocks = new PriceDomainMocks();
     }
 
     /**
@@ -55,27 +55,37 @@ class PriceServiceUseCaseTest {
         return Stream.of(
                 Arguments.of(
                         LocalDateTime.of(2020, 6, 14, 10, 0, 0),
-                        mocks.createExpectedPrice(1L, 0, "35.50", "2020-06-14T00:00:00", "2020-12-31T23:59:59"),
+                        PriceDomainMocks.createExpectedPrice(
+                                1L, 0, "35.50", "2020-06-14T00:00:00", "2020-12-31T23:59:59"
+                        ),
                         "Test 1: 10:00 día 14 - Precio base 35.50€"
                 ),
                 Arguments.of(
                         LocalDateTime.of(2020, 6, 14, 16, 0, 0),
-                        mocks.createExpectedPrice(2L, 1, "25.45", "2020-06-14T15:00:00", "2020-06-14T18:30:00"),
+                        PriceDomainMocks.createExpectedPrice(
+                                2L, 1, "25.45", "2020-06-14T15:00:00", "2020-06-14T18:30:00"
+                        ),
                         "Test 2: 16:00 día 14 - Promoción tarde 25.45€"
                 ),
                 Arguments.of(
                         LocalDateTime.of(2020, 6, 14, 21, 0, 0),
-                        mocks.createExpectedPrice(1L, 0, "35.50", "2020-06-14T00:00:00", "2020-12-31T23:59:59"),
+                        PriceDomainMocks.createExpectedPrice(
+                                1L, 0, "35.50", "2020-06-14T00:00:00", "2020-12-31T23:59:59"
+                        ),
                         "Test 3: 21:00 día 14 - Vuelve a precio base 35.50€"
                 ),
                 Arguments.of(
                         LocalDateTime.of(2020, 6, 15, 10, 0, 0),
-                        mocks.createExpectedPrice(3L, 1, "30.50", "2020-06-15T00:00:00", "2020-06-15T11:00:00"),
+                        PriceDomainMocks.createExpectedPrice(
+                                3L, 1, "30.50", "2020-06-15T00:00:00", "2020-06-15T11:00:00"
+                        ),
                         "Test 4: 10:00 día 15 - Promoción mañana 30.50€"
                 ),
                 Arguments.of(
                         LocalDateTime.of(2020, 6, 16, 21, 0, 0),
-                        mocks.createExpectedPrice(4L, 1, "38.95", "2020-06-15T16:00:00", "2020-12-31T23:59:59"),
+                        PriceDomainMocks.createExpectedPrice(
+                                4L, 1, "38.95", "2020-06-15T16:00:00", "2020-12-31T23:59:59"
+                        ),
                         "Test 5: 21:00 día 16 - Precio premium 38.95€"
                 )
         );
@@ -84,7 +94,7 @@ class PriceServiceUseCaseTest {
     @ParameterizedTest(name = "{2}")
     @MethodSource("businessScenarios")
     @DisplayName("Should return correct price for business scenarios")
-    void shouldReturnCorrectPriceForInditexBusinessScenarios(
+    void shouldReturnCorrectPriceForBusinessScenarios(
             LocalDateTime queryDate,
             Price expectedPrice,
             String scenarioDescription) {
@@ -122,7 +132,7 @@ class PriceServiceUseCaseTest {
         final Long brandId = 1L;
         final Long productId = 35455L;
         final LocalDateTime queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
-        final Price expectedPrice = mocks.createValidPrice();
+        final Price expectedPrice = this.mocks.createValidPrice();
 
         when(this.priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
                 .thenReturn(Optional.of(expectedPrice));
@@ -168,7 +178,7 @@ class PriceServiceUseCaseTest {
         final LocalDateTime queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
 
         when(this.priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
-                .thenReturn(Optional.of(mocks.createValidPrice()));
+                .thenReturn(Optional.of(this.mocks.createValidPrice()));
 
         // When
         this.priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
@@ -214,7 +224,7 @@ class PriceServiceUseCaseTest {
         final LocalDateTime queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
 
         when(this.priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
-                .thenReturn(Optional.of(mocks.createValidPrice()));
+                .thenReturn(Optional.of(this.mocks.createValidPrice()));
 
         // When
         final Price result = this.priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
@@ -234,7 +244,7 @@ class PriceServiceUseCaseTest {
         final LocalDateTime queryDate = LocalDateTime.of(1970, 1, 1, 0, 0, 0); // Época Unix
 
         when(this.priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
-                .thenReturn(Optional.of(mocks.createValidPrice()));
+                .thenReturn(Optional.of(this.mocks.createValidPrice()));
 
         // When
         final Price result = this.priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
@@ -253,7 +263,7 @@ class PriceServiceUseCaseTest {
         final LocalDateTime queryDate = LocalDateTime.of(2099, 12, 31, 23, 59, 59);
 
         when(this.priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
-                .thenReturn(Optional.of(mocks.createValidPrice()));
+                .thenReturn(Optional.of(this.mocks.createValidPrice()));
 
         // When
         final Price result = this.priceServiceUseCase.findByBrandProductBetweenDate(brandId, productId, queryDate);
@@ -264,13 +274,13 @@ class PriceServiceUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should validate service behavior for exact Inditex scenario 1")
-    void shouldValidateServiceBehaviorForExactInditexScenario1() {
+    @DisplayName("Should validate service behavior for exact scenario 1")
+    void shouldValidateServiceBehaviorForExactScenario1() {
         // Given - Test 1: petición a las 10:00 del día 14
         final Long brandId = 1L;
         final Long productId = 35455L;
         final LocalDateTime queryDate = LocalDateTime.of(2020, 6, 14, 10, 0, 0);
-        final Price expectedPrice = mocks.createExpectedPrice(1L, 0, "35.50",
+        final Price expectedPrice = PriceDomainMocks.createExpectedPrice(1L, 0, "35.50",
                 "2020-06-14T00:00:00", "2020-12-31T23:59:59");
 
         when(this.priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))
@@ -288,13 +298,13 @@ class PriceServiceUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should validate service behavior for exact Inditex scenario 2")
-    void shouldValidateServiceBehaviorForExactInditexScenario2() {
+    @DisplayName("Should validate service behavior for exact scenario 2")
+    void shouldValidateServiceBehaviorForExactScenario2() {
         // Given - Test 2: petición a las 16:00 del día 14 (promoción)
         final Long brandId = 1L;
         final Long productId = 35455L;
         final LocalDateTime queryDate = LocalDateTime.of(2020, 6, 14, 16, 0, 0);
-        final Price expectedPrice = mocks.createExpectedPrice(2L, 1, "25.45",
+        final Price expectedPrice = PriceDomainMocks.createExpectedPrice(2L, 1, "25.45",
                 "2020-06-14T15:00:00", "2020-06-14T18:30:00");
 
         when(this.priceRepositoryPort.findBestPrice(any(PriceSearchCriteria.class)))

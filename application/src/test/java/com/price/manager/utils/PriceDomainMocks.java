@@ -4,7 +4,6 @@ import com.price.manager.domain.Price;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class PriceDomainMocks {
 
@@ -21,7 +20,7 @@ public class PriceDomainMocks {
 				.build();
 	}
 
-	public Price createExpectedPrice(Long priceList, Integer priority, String priceValue,
+	public static Price createExpectedPrice(Long priceList, Integer priority, String priceValue,
 											 String startDateStr, String endDateStr) {
 		return Price.builder()
 				.brandId(1L)

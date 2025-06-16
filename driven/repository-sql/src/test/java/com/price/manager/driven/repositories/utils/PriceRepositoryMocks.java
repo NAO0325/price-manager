@@ -8,15 +8,37 @@ import java.time.LocalDateTime;
 
 public class PriceRepositoryMocks {
 
-	public PriceEntity createPriceEntity() {
-		return PriceEntity.builder().brandId(1L).startDate(LocalDateTime.of(2020, 6, 14, 0, 0, 0))
-				.endDate(LocalDateTime.of(2020, 6, 14, 23, 59, 59)).priceList(1L).productId(35455L).priority(0)
-				.price(new BigDecimal("35.50")).curr("EUR").build();
+	public PriceEntity createTestPriceEntity() {
+		return this.createTestPriceEntityFor(1L, 35455L);
 	}
 
-	public Price createPrice() {
-		return Price.builder().brandId(1L).startDate(LocalDateTime.of(2020, 6, 14, 0, 0, 0))
-				.endDate(LocalDateTime.of(2020, 6, 14, 23, 59, 59)).priceList(1L).productId(35455L).priority(0)
-				.price(new BigDecimal("35.50")).curr("EUR").build();
+	public PriceEntity createTestPriceEntityFor(Long brandId, Long productId) {
+		return PriceEntity.builder()
+				.brandId(brandId)
+				.startDate(LocalDateTime.of(2020, 6, 14, 0, 0, 0))
+				.endDate(LocalDateTime.of(2020, 6, 14, 23, 59, 59))
+				.priceList(1L)
+				.productId(productId)
+				.priority(0)
+				.price(new BigDecimal("35.5"))
+				.curr("EUR")
+				.build();
+	}
+
+	public Price createTestPrice() {
+		return this.createTestPriceFor(1L, 35455L);
+	}
+
+	public Price createTestPriceFor(Long brandId, Long productId) {
+		return Price.builder()
+				.brandId(brandId)
+				.startDate(LocalDateTime.of(2020, 6, 14, 0, 0, 0))
+				.endDate(LocalDateTime.of(2020, 6, 14, 23, 59, 59))
+				.priceList(1L)
+				.productId(productId)
+				.priority(0)
+				.price(new BigDecimal("35.5"))
+				.curr("EUR")
+				.build();
 	}
 }

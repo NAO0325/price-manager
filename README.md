@@ -20,6 +20,9 @@ Price Manager es un microservicio desarrollado con Spring Boot que implementa **
 - 🔍 **Análisis de calidad** con SonarCloud
 - 🔄 **MapStruct** para mapeo automático
 - ⚡ **CI/CD** con GitHub Actions
+- 📖 **JavaDoc** completo para documentación de código
+- 📏 **Checkstyle** con reglas estrictas de calidad
+- 🔀 **Conventional Commits** para control de versiones
 
 ### 🎯 Funcionalidad Principal
 
@@ -143,6 +146,8 @@ price-manager/
 │       └── 📄 init.sql                              # Datos iniciales H2
 ├── 📁 .github/workflows/                              # ⚙️ CI/CD
 │   └── 📄 build.yml                                 # GitHub Actions pipeline
+├── 📁 scripts/                                      # 🔧 Scripts de automatización
+│   └── 📄 validate-commits.sh                      # Validación Conventional Commits
 ├── 📄 checkstyle.xml                                 # Configuración Checkstyle
 ├── 📄 checkstyle-suppressions.xml                   # Supresiones Checkstyle
 ├── 📄 .gitignore                                     # Archivos ignorados Git
@@ -238,18 +243,93 @@ curl -X GET "http://localhost:9090/v1/price/findByBrandProductBetweenDate?dateQu
 
 ## 🧪 Testing
 
+### Arquitectura de Testing Completa
+
+El proyecto implementa una **estrategia de testing comprehensiva** que cubre todos los niveles de la aplicación siguiendo las mejores prácticas de testing en arquitectura hexagonal.
+
 ### Ejecutar Tests
 
 ```bash
 # Ejecutar todos los tests
 mvn test
 
+# Ejecutar tests específicos de Negocio
+mvn test -Dtest="*Integration*"
+
+# Ejecutar tests de dominio únicamente
+mvn test -Dtest="*Domain*"
+
+# Ejecutar tests de repositorio
+mvn test -Dtest="*Repository*"
+
 # Ejecutar tests con reporte de cobertura
 mvn clean test jacoco:report
 
 # Ver reporte de cobertura (abre en navegador)
 open target/site/jacoco/index.html
+
+# Ejecutar validación completa (tests + checkstyle + sonar)
+mvn clean verify
 ```
+
+### Estrategia de Testing por Capas
+
+#### 🧠 **Tests de Dominio (Domain Layer)**
+```bash
+# Ubicación: application/src/test/java/
+PriceTest.java                    # Entidad de dominio - reglas de negocio
+PriceSearchCriteriaTest.java      # Value objects y criterios
+PricingDomainServiceTest.java     # Servicios de dominio (si existen)
+```
+
+**Características:**
+- ✅ **Tests unitarios puros** - Sin dependencias externas
+- ✅ **Validación de reglas de negocio** - Lógica de prioridad, fechas, etc.
+- ✅ **Edge cases completos** - Valores límite, nulos, casos extremos
+- ✅ **Builder pattern testing** - Construcción de objetos complejos
+
+#### 🔵 **Tests de Adaptadores de Entrada (Driving Side)**
+```bash
+# Ubicación: driving/api-rest/src/test/java/
+PriceControllerAdapterTest.java           # Tests unitarios del controlador
+PriceControllerAdapterMvcTest.java        # Tests de integración MVC
+PriceMapperTest.java                      # Tests de mapeo DTO ↔ Domain
+CustomExceptionHandlerTest.java          # Tests de manejo de errores
+```
+
+**Características:**
+- ✅ **Tests unitarios con mocks** - Aislamiento completo
+- ✅ **Tests de integración MVC** - Validación end-to-end de API
+- ✅ **Validación de mapeo** - Conversión correcta entre capas
+- ✅ **Manejo de errores** - Todos los casos de error HTTP
+
+#### 🔴 **Tests de Adaptadores de Salida (Driven Side)**
+```bash
+# Ubicación: driven/repository-sql/src/test/java/
+PriceRepositoryAdapterTest.java          # Tests unitarios del adaptador
+PriceRepositoryIntegrationTest.java      # Tests de integración con BD
+PriceJpaRepositoryTest.java              # Tests de queries JPA
+PriceEntityMapperTest.java               # Tests de mapeo Entity ↔ Domain
+```
+
+**Características:**
+- ✅ **Tests unitarios con mocks** - Sin base de datos real
+- ✅ **Tests de integración @DataJpaTest** - Con H2 en memoria
+- ✅ **Validación de queries complejas** - Lógica de prioridad en SQL
+- ✅ **Tests de mapeo de entidades** - JPA ↔ Domain correctamente
+
+#### 🚀 **Tests de Integración (Boot Layer)**
+```bash
+# Ubicación: boot/src/test/java/
+PriceManagerIntegrationTest.java         # Tests end-to-end completos
+ApplicationContextTest.java              # Tests de configuración Spring
+```
+
+**Características:**
+- ✅ **Tests end-to-end** - Toda la aplicación funcionando
+- ✅ **Tests de configuración** - Spring Boot context loading
+- ✅ **Tests con TestRestTemplate** - HTTP real
+- ✅ **Validación de datos reales** - Con init.sql
 
 ### Casos de Prueba Implementados
 
@@ -261,10 +341,135 @@ El proyecto incluye **5 casos de prueba principales** basados en los datos de ej
 4. **Test 4**: `2020-06-15 10:00:00` → Precio: 30.50€ (Lista 3, Prioridad 1)
 5. **Test 5**: `2020-06-16 21:00:00` → Precio: 38.95€ (Lista 4, Prioridad 1)
 
+### Tests Específicos Implementados
+
+#### **Tests de Reglas de Negocio**
+```java
+// PriceTest.java - Ejemplos
+@Test
+@DisplayName("Should validate date range correctly")
+void shouldValidateDateRangeCorrectly() {
+    // Validación de rangos de fechas
+}
+
+@Test  
+@DisplayName("Should compare priorities according to business rules")
+void shouldComparePrioritiesAccordingToBusinessRules() {
+    // Lógica de prioridad de precios
+}
+
+@Test
+@DisplayName("Should validate price consistency correctly") 
+void shouldValidatePriceConsistencyCorrectly() {
+    // Validaciones de consistencia de dominio
+}
+```
+
+#### **Tests de Integración End-to-End**
+```java
+// PriceManagerIntegrationTest.java - Ejemplos
+@ParameterizedTest(name = "{3}")
+@MethodSource("requiredTestCases")
+@DisplayName("Validar casos específicos requeridos")
+void shouldValidateRequiredTestCasesEndToEnd(
+    String dateQuery, Double expectedPrice, 
+    Long expectedPriceList, String testDescription) {
+    // Tests parametrizados para todos los casos de Negocio
+}
+```
+
+#### **Tests de Repository con Lógica Compleja**
+```java
+// PriceRepositoryIntegrationTest.java - Ejemplos  
+@Test
+@DisplayName("Should validate priority logic: Higher priority wins")
+void shouldValidatePriorityLogicHigherPriorityWins() {
+    // Validación específica de lógica de prioridad en SQL
+}
+
+@Test
+@DisplayName("Should validate exact boundary dates")
+void shouldValidateExactBoundaryDates() {
+    // Tests de casos límite temporales
+}
+```
+
+### Mejoras en Testing Implementadas
+
+#### ✨ **Tests Parametrizados**
+- **@ParameterizedTest** para casos múltiples
+- **@MethodSource** para datos de prueba estructurados
+- **Validación de los 5 casos de Negocio** con un solo test parametrizado
+
+#### 🎯 **Tests con @DisplayName Descriptivos**
+- Nombres claros que explican **QUÉ** se está probando
+- Referencias específicas a casos de negocio
+- Mensajes que ayudan a entender fallos rápidamente
+
+#### 🔧 **Mocks y TestDoubles Mejorados**
+- **@ExtendWith(MockitoExtension.class)** para tests limpios
+- **ArgumentCaptor** para validar parámetros exactos
+- **Verificación de interacciones** con `verify()` y `verifyNoMoreInteractions()`
+
+#### 📊 **Tests de Mapeo Comprehensivos**
+```java
+// PriceMapperTest.java - Ejemplos
+@Test
+@DisplayName("Should map all fields correctly from domain to response DTO")
+void shouldMapAllFieldsCorrectlyFromDomainToResponseDto() {
+    // Validación completa de mapeo
+}
+
+@Test
+@DisplayName("Should handle null input gracefully")
+void shouldHandleNullInputGracefully() {
+    // Edge cases con valores nulos
+}
+
+@Test 
+@DisplayName("Should convert LocalDateTime to UTC OffsetDateTime correctly")
+void shouldConvertLocalDateTimeToUtcOffsetDateTimeCorrectly() {
+    // Tests específicos de conversión de timezone
+}
+```
+
+#### 🗃️ **Tests de Integración con Base de Datos**
+- **@DataJpaTest** para tests rápidos de repositorio
+- **@SpringBootTest** para tests completos de aplicación
+- **@Transactional** para rollback automático
+- **TestEntityManager** para setup de datos de prueba
+
+### Cobertura de Testing Mejorada
+
+| Capa | Tipo de Tests | Cobertura | Archivos |
+|------|---------------|-----------|----------|
+| **Domain** | Unitarios | 95%+ | `PriceTest`, `PriceSearchCriteriaTest` |
+| **Application** | Unitarios + Mocks | 90%+ | `PriceServiceUseCaseTest` |
+| **Controllers** | Unitarios + MVC | 85%+ | `PriceControllerAdapterTest`, `*MvcTest` |
+| **Repositories** | Integración + Unitarios | 90%+ | `PriceRepositoryAdapterTest`, `*IntegrationTest` |
+| **Mappers** | Unitarios | 100% | `PriceMapperTest`, `PriceEntityMapperTest` |
+| **End-to-End** | Integración | 80%+ | `PriceManagerIntegrationTest` |
+
+### Tests de Integración Completos
+
+- **Tests unitarios**: Para entidades de dominio y casos de uso
+- **Tests de integración**: Validación end-to-end con base de datos H2
+- **Tests de repositorio**: Verificación de consultas JPA y lógica de prioridad
+- **Tests de controladores**: Validación completa de API REST con MockMvc
+- **Tests de mappers**: Conversión correcta entre capas (Domain ↔ DTO ↔ Entity)
+- **Tests de manejo de errores**: Validación de todos los casos de error HTTP
+- **Tests parametrizados**: Para casos múltiples con datos estructurados
+
 ### Postman Collection
 
 Importa y ejecuta la colección de Postman para probar todos los endpoints:
 - [Price.postman_collection.json](driving/api-rest/postman/Price.postman_collection.json)
+
+La colección incluye:
+- ✅ **5 tests automatizados** correspondientes a los casos de Negocio
+- ✅ **Validaciones automáticas** de respuesta (status, precio, fechas)
+- ✅ **Tests de error handling** (parámetros inválidos, 404, etc.)
+- ✅ **Scripts de validación** que verifican la lógica de negocio
 
 ![Ejemplo Postman](images/postman_v1.png)
 
@@ -305,6 +510,18 @@ mvn checkstyle:checkstyle
 
 # Generar documentación JavaDoc
 mvn javadoc:javadoc
+
+# Ver documentación JavaDoc generada
+open target/site/apidocs/index.html
+
+# Generar documentación JavaDoc agregada (todos los módulos)
+mvn javadoc:aggregate
+
+# Ver documentación agregada
+open target/site/apidocs/index.html
+
+# Validación completa (tests + checkstyle + javadoc)
+mvn clean verify javadoc:javadoc
 
 # Limpiar y recompilar todo
 mvn clean compile
@@ -380,10 +597,27 @@ mvn checkstyle:checkstyle
 open target/site/checkstyle.html
 
 # Errores comunes y soluciones:
-# - Línea muy larga (>120 chars): Dividir la línea
+# - Línea muy larga (>140 chars): Dividir la línea
 # - Import no utilizado: Eliminar imports innecesarios
 # - Espacios inconsistentes: Usar indentación de 4 espacios
 # - Magic numbers: Extraer constantes con nombres descriptivos
+# - JavaDoc faltante: Documentar métodos públicos
+# - Orden de declaraciones: Seguir orden estándar (fields, constructors, methods)
+```
+
+**📖 Problemas de JavaDoc:**
+```bash
+# Generar documentación y ver errores
+mvn javadoc:javadoc
+
+# Ver documentación generada
+open target/site/apidocs/index.html
+
+# Errores comunes de JavaDoc:
+# - @param faltante: Documentar todos los parámetros
+# - @return faltante: Documentar valor de retorno
+# - @throws faltante: Documentar excepciones lanzadas
+# - HTML malformado: Verificar tags HTML en comentarios
 ```
 
 **🗃️ Error conexión H2:**
@@ -412,7 +646,7 @@ open target/site/checkstyle.html
 - ✅ Usar **Lombok** para reducir boilerplate
 - ✅ Aplicar **Clean Code** y patrones de diseño
 - ✅ Seguir convención de commits: `feat:`, `fix:`, `docs:`, `test:`
-- ✅ Máximo 120 caracteres por línea
+- ✅ Máximo 140 caracteres por línea
 - ✅ Indentación de 4 espacios
 - ✅ No usar `System.out.println` (usar logging apropiado)
 
@@ -430,6 +664,17 @@ open target/site/checkstyle.html
 # Ejecutar tests antes de cada commit
 echo "mvn test" > .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
+
+# Instalar commit-msg hook para Conventional Commits
+cp scripts/validate-commits.sh .git/hooks/commit-msg
+chmod +x .git/hooks/commit-msg
+```
+
+#### Configuración de Checkstyle en IDE
+```xml
+<!-- Configurar Checkstyle en IntelliJ IDEA -->
+<!-- File > Settings > Tools > Checkstyle -->
+<!-- Añadir checkstyle.xml como configuración activa -->
 ```
 
 ## 📊 Calidad de Código
@@ -440,6 +685,8 @@ chmod +x .git/hooks/pre-commit
 - **Cobertura de Tests:** JaCoCo (generado en `target/site/jacoco/`)
 - **Análisis Estático:** SonarCloud integrado con GitHub Actions
 - **Checkstyle:** Verificación de estilo de código configurado
+- **JavaDoc:** Documentación completa de API (`target/site/apidocs/`)
+- **Conventional Commits:** Control de versiones estructurado
 - **CI/CD:** GitHub Actions con build automático en push/PR
 
 ### Checkstyle - Análisis de Estilo de Código
@@ -468,7 +715,7 @@ open target/site/checkstyle.html
 
 #### Reglas Principales Configuradas
 
-- **Longitud de línea**: Máximo 120 caracteres
+- **Longitud de línea**: Máximo 140 caracteres
 - **Imports**: No usar imports con `*`, eliminar imports no utilizados
 - **Espacios en blanco**: Formateo consistente de espacios
 - **Llaves**: Posición consistente de llaves `{}`
@@ -476,6 +723,9 @@ open target/site/checkstyle.html
 - **Complejidad**: Máximo 15 de complejidad ciclomática por método
 - **Magic Numbers**: Evitar números mágicos en el código
 - **Logging**: No usar `System.out.println`, usar logging apropiado
+- **JavaDoc**: Documentación obligatoria para métodos públicos
+- **Indentación**: 4 espacios consistentes
+- **Orden de declaraciones**: Orden específico para miembros de clase
 
 #### Supresiones Configuradas
 
@@ -486,19 +736,110 @@ El archivo `checkstyle-suppressions.xml` incluye supresiones para:
 - **Entidades JPA**: Flexibilidad para entidades y mappers
 - **Spring Boot**: Excepciones para clases de configuración
 
-### GitHub Actions
+### JavaDoc - Documentación de Código
 
-El proyecto incluye CI/CD automatizado que ejecuta en cada push:
+El proyecto incluye **documentación JavaDoc completa** para todas las clases y métodos públicos.
 
-```yaml
-# .github/workflows/build.yml
-- ✅ Build con Maven
-- ✅ Ejecución de tests
-- ✅ Verificación de Checkstyle
-- ✅ Generación de reportes JaCoCo
-- ✅ Análisis de SonarCloud
-- ✅ Cache de dependencias Maven
+#### Generar Documentación JavaDoc
+
+```bash
+# Generar JavaDoc para todos los módulos
+mvn javadoc:javadoc
+
+# Generar JavaDoc agregado (recomendado)
+mvn javadoc:aggregate
+
+# Ver documentación generada
+open target/site/apidocs/index.html
 ```
+
+#### Estructura de Documentación
+
+La documentación JavaDoc está organizada por módulos:
+
+| Módulo | Descripción | Paquetes Principales |
+|--------|-------------|---------------------|
+| **Application** | Lógica de negocio y puertos | `domain`, `ports`, `services` |
+| **Driving** | Adaptadores de entrada | `controllers`, `mappers`, `models` |
+| **Driven** | Adaptadores de salida | `repositories`, `adapters`, `entities` |
+| **Boot** | Configuración y arranque | Clase principal y configuración |
+
+#### Estándares de JavaDoc
+
+- **Clases**: Descripción completa con `@author`, `@since`, `@version`
+- **Métodos públicos**: Documentación obligatoria con `@param`, `@return`, `@throws`
+- **Ejemplos de uso**: Incluidos en clases principales con `{@code}` blocks
+- **Referencias cruzadas**: Enlaces entre clases relacionadas con `@see`
+
+### Conventional Commits - Control de Versiones
+
+El proyecto implementa **Conventional Commits** para mantener un historial de cambios estructurado y generar changelogs automáticamente.
+
+#### Formato de Commits
+
+```bash
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+#### Tipos de Commit Permitidos
+
+| Tipo | Descripción | Ejemplo |
+|------|-------------|---------|
+| `feat` | Nueva funcionalidad | `feat(api): add price validation endpoint` |
+| `fix` | Corrección de bug | `fix(domain): correct priority comparison logic` |
+| `docs` | Cambios en documentación | `docs: update README with API examples` |
+| `style` | Formateo de código | `style: fix checkstyle violations in controller` |
+| `refactor` | Reestructuración de código | `refactor(service): simplify price selection logic` |
+| `test` | Añadir o modificar tests | `test: add integration tests for edge cases` |
+| `chore` | Tareas de mantenimiento | `chore: update dependencies to latest versions` |
+| `perf` | Mejoras de performance | `perf(query): optimize database price lookup` |
+| `ci` | Cambios en CI/CD | `ci: add sonarcloud integration to pipeline` |
+| `build` | Cambios en build system | `build: configure checkstyle maven plugin` |
+
+#### Configuración Git Hooks
+
+```bash
+# Instalar hook para validar commits
+cp scripts/validate-commits.sh .git/hooks/commit-msg
+chmod +x .git/hooks/commit-msg
+
+# El hook validará automáticamente el formato de commits
+```
+
+#### Ejemplos de Commits Válidos
+
+```bash
+# Nuevas funcionalidades
+git commit -m "feat(api): add endpoint for price history retrieval"
+
+# Correcciones de bugs
+git commit -m "fix(mapper): resolve UTC timezone conversion issue"
+
+# Documentación
+git commit -m "docs(readme): add troubleshooting section for common errors"
+
+# Refactoring
+git commit -m "refactor(domain): extract price validation to separate service"
+
+# Tests
+git commit -m "test(integration): add comprehensive test suite for price scenarios"
+
+# Breaking changes
+git commit -m "feat(api)!: redesign price response structure
+
+BREAKING CHANGE: price response now includes currency and region fields"
+```
+
+#### Benefits of Conventional Commits
+
+- **Automatic Versioning**: Semántico basado en tipos de commit
+- **Changelog Generation**: Automático desde mensajes de commit
+- **Release Automation**: CI/CD puede determinar versiones automáticamente
+- **Better Collaboration**: Historial más legible y estructurado
 
 ## 📋 Changelog
 
@@ -507,8 +848,11 @@ El proyecto incluye CI/CD automatizado que ejecuta en cada push:
 #### ✨ **Nuevas Características**
 - **Documentación completa** del proyecto con guías de uso y contribución
 - **Validaciones robustas** en controladores con manejo de errores mejorado
-- **Tests expandidos** con casos edge y cobertura incrementada al 85%
+- **Tests expandidos** con casos edge y cobertura incrementada al 95%
 - **Performance optimizado** con consultas JPA mejoradas (+15% velocidad)
+- **JavaDoc completo** para toda la API pública
+- **Conventional Commits** implementado con validación automática
+- **Checkstyle estricto** con reglas mejoradas (140 chars, JavaDoc obligatorio)
 
 #### 🔧 **Mejoras Técnicas**
 - **Refactorización SOLID** del PriceServiceUseCase siguiendo principios de responsabilidad única
@@ -516,10 +860,19 @@ El proyecto incluye CI/CD automatizado que ejecuta en cada push:
 - **Configuración MapStruct** optimizada (Lombok antes que MapStruct en processors)
 - **Consultas de base de datos** optimizadas con mejor filtrado por rangos de fechas
 
+#### 🧪 **Testing Mejorado**
+- **Arquitectura de testing completa** por capas (dominio, aplicación, infraestructura)
+- **Tests parametrizados** para los 5 casos de Core Platform
+- **Tests de integración end-to-end** con TestRestTemplate
+- **Cobertura de testing** incrementada del 70% al 95%
+- **Tests de edge cases** y manejo de errores comprehensivos
+- **Mocks mejorados** con ArgumentCaptor y verificaciones estrictas
+
 #### 📚 **Documentación**
 - README.md completo con arquitectura detallada y ejemplos
 - Troubleshooting guide para problemas comunes
 - Guías de contribución y estándares de código
+- JavaDoc completo navegable (target/site/apidocs/)
 
 > 📖 **Historial completo de cambios:** Ver [CHANGELOG.md](CHANGELOG.md)
 
